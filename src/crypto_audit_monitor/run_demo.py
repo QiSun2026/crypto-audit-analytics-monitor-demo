@@ -3,10 +3,15 @@ from __future__ import annotations
 from pathlib import Path
 
 from .agent_action_example import run_agent_action_case
+from .bounded_agentic import run_bounded_workflow
 from .engine import run_demo
 from .renderer import render_html
 from .review_log import append_review_record, read_review_log
-from .showcase import render_agent_action_case, render_showcase
+from .showcase import (
+    render_agent_action_case,
+    render_bounded_workflow_case,
+    render_showcase,
+)
 
 
 def seed_worked_reviews(result: dict) -> list[dict]:
@@ -162,6 +167,15 @@ def main() -> None:
         encoding="utf-8",
         newline="\n",
     )
+    workflow_result = run_bounded_workflow(
+        root / "outputs" / "bounded_agentic_commission_v0_3_rc6"
+    )
+    workflow_demo = demo_dir / "bounded_workflow_case.html"
+    workflow_demo.write_text(
+        render_bounded_workflow_case(workflow_result),
+        encoding="utf-8",
+        newline="\n",
+    )
     showcase_demo = demo_dir / "index.html"
     showcase_demo.write_text(
         render_showcase(),
@@ -181,6 +195,7 @@ def main() -> None:
     print(f"Showcase HTML: {showcase_demo}")
     print(f"Commission case: {commission_demo}")
     print(f"Agent action case: {agent_demo}")
+    print(f"Bounded workflow proof: {workflow_demo}")
 
 
 if __name__ == "__main__":

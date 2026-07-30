@@ -36,6 +36,13 @@ ALLOWED_DISPOSITIONS = {
     "escalate_for_investigation",
 }
 
+ALLOWED_CONCLUSION_DISPOSITIONS = {
+    "supported_explanation": {"close_with_explanation"},
+    "more_evidence_required": {"keep_open", "escalate_for_investigation"},
+    "control_exception_confirmed": {"escalate_for_investigation"},
+    "data_quality_issue": {"keep_open", "escalate_for_investigation"},
+}
+
 GENESIS_HASH = "0" * 64
 
 
@@ -87,6 +94,13 @@ def _validate_review_semantics(
         raise ValueError("review conclusion is not allowed")
     if record["disposition"] not in ALLOWED_DISPOSITIONS:
         raise ValueError("review disposition is not allowed")
+    if (
+        record["disposition"]
+        not in ALLOWED_CONCLUSION_DISPOSITIONS[record["conclusion"]]
+    ):
+        raise ValueError(
+            "review conclusion and disposition are incompatible"
+        )
     if not isinstance(record["ai_assistance_used"], bool):
         raise ValueError("ai_assistance_used must be explicitly true or false")
     if not isinstance(record["evidence_viewed"], list) or not record["evidence_viewed"]:
@@ -118,9 +132,18 @@ def _validate_review_semantics(
         if timestamp <= previous_timestamp:
             raise ValueError("review timestamps must increase monotonically")
 
+    prior_for_exception = [
+        item
+        for item in prior_records
+        if item["exception_id"] == record["exception_id"]
+    ]
     supersedes = record.get("supersedes_review_id")
-    if supersedes is None:
+    if not prior_for_exception and supersedes is None:
         return
+    if prior_for_exception and supersedes is None:
+        raise ValueError(
+            "later review must supersede the current active review"
+        )
     superseded = prior_by_id.get(supersedes)
     if superseded is None:
         raise ValueError("superseded review record does not exist")
@@ -131,6 +154,44 @@ def _validate_review_semantics(
             )
     if timestamp <= _parse_review_timestamp(superseded["review_timestamp_utc"]):
         raise ValueError("correction must postdate the superseded review")
+    already_superseded = {
+        item["supersedes_review_id"]
+        for item in prior_records
+        if item.get("supersedes_review_id") is not None
+    }
+    if supersedes in already_superseded:
+        raise ValueError("correction cannot branch from a superseded review")
+    active_for_exception = prior_for_exception[-1]
+    if supersedes != active_for_exception["review_id"]:
+        raise ValueError(
+            "correction must supersede the current active review"
+        )
+
+
+def active_review_records(
+    records: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    active: dict[str, dict[str, Any]] = {}
+    by_id: dict[str, dict[str, Any]] = {}
+    for record in records:
+        review_id = record["review_id"]
+        exception_id = record["exception_id"]
+        supersedes = record.get("supersedes_review_id")
+        current = active.get(exception_id)
+        if current is None:
+            if supersedes is not None:
+                raise ValueError(
+                    "first review for an exception cannot supersede a record"
+                )
+        elif supersedes != current["review_id"]:
+            raise ValueError(
+                "review sequence must supersede the current active review"
+            )
+        if supersedes is not None and supersedes not in by_id:
+            raise ValueError("superseded review record does not exist")
+        active[exception_id] = record
+        by_id[review_id] = record
+    return active
 
 
 def verify_review_chain(

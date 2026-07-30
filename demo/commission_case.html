@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Commission Assurance | RiskFirewall</title>
+<title>Commission Assurance | RiskFirewall AI — Risk Control Assurance</title>
 <style>
 :root {
   --ink:#172033; --muted:#647084; --line:#d8dee8; --paper:#f6f8fb;
@@ -18,7 +18,11 @@ header { position:sticky; top:0; z-index:5; background:rgba(255,255,255,.96);
   border-bottom:1px solid var(--line); }
 .top { max-width:1240px; margin:auto; padding:18px 28px 12px;
   display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
-.brand { font-size:20px; font-weight:800; white-space:nowrap; flex-shrink:0; }
+.brand { color:var(--ink); font:800 20px/1.2 Inter,Segoe UI,Arial,sans-serif;
+  letter-spacing:-.02em; text-decoration:none; flex-shrink:0; }
+.brand span { color:var(--blue); margin-right:6px; }
+.brand:hover { color:var(--blue); }
+.brand:focus-visible { outline:3px solid #b8cce2; outline-offset:5px; border-radius:4px; }
 .case { padding-left:18px; border-left:1px solid var(--line); font-weight:700; white-space:nowrap; }
 .spacer { flex:1; }
 select { border:1px solid var(--line); border-radius:999px; padding:9px 34px 9px 14px;
@@ -32,12 +36,21 @@ h1 { max-width:980px; font-size:clamp(40px,7vw,82px); line-height:.98; letter-sp
   margin:18px 0 24px; }
 h2 { font-size:32px; margin:58px 0 10px; letter-spacing:-.025em; }
 .lede { max-width:820px; font-size:21px; line-height:1.55; color:var(--muted); }
-.chips,.filters { display:flex; gap:10px; flex-wrap:wrap; margin:24px 0; }
-.chip,.filter { border:1px solid var(--line); border-radius:999px; padding:9px 14px;
+.status-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  margin:28px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.status-item { padding:16px 18px 16px 0; }
+.status-label { display:flex; align-items:center; gap:8px; color:var(--muted);
+  font-size:13px; font-weight:750; }
+.status-value { margin-top:6px; font-weight:800; line-height:1.35; }
+.status-dot { width:10px; height:10px; border-radius:50%; flex:0 0 auto;
+  background:var(--gray); }
+.status-dot.green { background:var(--green); }
+.status-dot.amber { background:#d58a00; }
+.status-dot.red { background:var(--red); }
+.status-dot.blue { background:var(--blue); }
+.filters { display:flex; gap:10px; flex-wrap:wrap; margin:24px 0; }
+.filter { border:1px solid var(--line); border-radius:999px; padding:9px 14px;
   background:white; font-weight:750; color:var(--gray); }
-.chip.green { background:var(--green-bg); color:var(--green); border-color:#a9dfba; }
-.chip.amber { background:var(--amber-bg); color:var(--amber); border-color:#f0cc63; }
-.chip.red { background:var(--red-bg); color:var(--red); border-color:#f1b4b4; }
 .filter { cursor:pointer; }
 .filter.active { background:var(--blue); color:white; border-color:var(--blue); }
 .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
@@ -60,10 +73,10 @@ th { color:var(--muted); font-size:13px; letter-spacing:.04em; text-transform:up
 .review-head { display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:10px; }
 .review-meta { color:var(--muted); font-size:14px; }
 .review-rationale { line-height:1.55; margin:10px 0 0; }
-.review-correction { border-left:4px solid var(--blue); }
+.review-correction { border-color:#8fb3d5; background:var(--blue-bg); }
 .high { color:var(--red); } .medium { color:var(--amber); }
-.note { border-left:4px solid var(--blue); background:var(--blue-bg);
-  border-radius:0 14px 14px 0; padding:18px 20px; color:#244b72; line-height:1.55; }
+.note { border:1px solid #8fb3d5; background:var(--blue-bg);
+  border-radius:14px; padding:18px 20px; color:#244b72; line-height:1.55; }
 .boundary { background:var(--gray-bg); border:1px solid var(--line); border-radius:18px; padding:24px;
   display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 .boundary ul { margin:8px 0 0; padding-left:20px; line-height:1.65; }
@@ -78,18 +91,22 @@ html.lang-zh [data-lang="zh"] { display:initial; }
   .grid,.gate-grid { grid-template-columns:1fr 1fr; }
   .boundary { grid-template-columns:1fr; }
   .case { width:100%; border-left:0; padding-left:0; white-space:normal; }
-  nav { flex-wrap:nowrap; overflow-x:auto; }
+  nav { flex-wrap:wrap; overflow-x:visible; }
   nav a { flex:0 0 auto; }
   section[id] { scroll-margin-top:18px; }
 }
-@media(max-width:540px) { .grid,.gate-grid { grid-template-columns:1fr; } main,.top,nav { padding-left:18px; padding-right:18px; } }
+@media(max-width:540px) {
+  .grid,.gate-grid { grid-template-columns:1fr; }
+  main,.top,nav { padding-left:18px; padding-right:18px; }
+  .brand { max-width:100%; font-size:16px; }
+}
 </style>
 </head>
 <body>
 <header>
   <div class="top">
-    <a class="brand" href="index.html" data-case-link><span aria-hidden="true">←</span> RiskFirewall</a>
-    <div class="case"><span data-lang="en">Commission assurance</span><span data-lang="zh">佣金审计证据</span></div>
+    <a class="brand" href="index.html" data-case-link><span aria-hidden="true">←</span> RiskFirewall AI — Risk Control Assurance</a>
+    <div class="case"><span data-lang="en">Case 1 · Commission control assurance</span><span data-lang="zh">案例 1 · 佣金控制鉴证</span></div>
     <div class="spacer"></div>
     <label><span data-lang="en">Language</span><span data-lang="zh">语言</span>
       <select id="language"><option value="en">English</option><option value="zh">中文</option></select>
@@ -105,16 +122,30 @@ html.lang-zh [data-lang="zh"] { display:initial; }
 </header>
 <main>
   <section id="overview">
-    <div class="eyebrow"><span data-lang="en">Commission assurance · controlled synthetic case</span><span data-lang="zh">佣金审计证据 · 受控合成案例</span></div>
-    <h1><span data-lang="en">Commission assurance: test the population, preserve the explanation.</span><span data-lang="zh">佣金审计证据：测试全量总体，保留解释责任。</span></h1>
+    <div class="eyebrow"><span data-lang="en">Case 1 · Commission control assurance · controlled synthetic case</span><span data-lang="zh">案例 1 · 佣金控制鉴证 · 受控合成案例</span></div>
+    <h1><span data-lang="en">Commission control assurance: test the population, preserve the explanation.</span><span data-lang="zh">佣金控制鉴证：测试全量总体，保留解释责任。</span></h1>
     <p class="lede"><span data-lang="en">Deterministic SQL identifies signals in fabricated wallet and commission data. Every item stays tied to its rule, source rows and hash-bound snapshot; only a human may interpret it.</span><span data-lang="zh">确定性 SQL 在编造的钱包与佣金数据中识别信号。每一项都绑定规则、源数据行与哈希绑定的快照；含义只能由人工判断。</span></p>
-    <div class="chips">
-      <span class="chip green"><span data-lang="en">6 run gates passed</span><span data-lang="zh">6 项运行闸门通过</span></span>
-      <span class="chip"><span data-lang="en">2 release tests separate</span><span data-lang="zh">另有 2 项发布测试</span></span>
-      <span class="chip amber"><span data-lang="en">Human review required</span><span data-lang="zh">必须人工复核</span></span>
-      <span class="chip red"><span data-lang="en">No fraud conclusion</span><span data-lang="zh">不作欺诈结论</span></span>
-      <span class="chip green"><span data-lang="en">L1 candidate: deterministic recomputation</span><span data-lang="zh">L1 候选：确定性重算</span></span>
-      <span class="chip"><span data-lang="en">G6-G7 release tests required; L2-L3 not achieved</span><span data-lang="zh">仍需 G6-G7 发布测试；尚未达到 L2-L3</span></span>
+    <div class="status-summary" aria-label="Case status">
+      <div class="status-item">
+        <div class="status-label"><span class="status-dot green"></span><span data-lang="en">Runtime gates</span><span data-lang="zh">运行闸门</span></div>
+        <div class="status-value"><span data-lang="en">6 passed</span><span data-lang="zh">6 项通过</span></div>
+      </div>
+      <div class="status-item">
+        <div class="status-label"><span class="status-dot blue"></span><span data-lang="en">Release harness</span><span data-lang="zh">发布 Harness</span></div>
+        <div class="status-value"><span data-lang="en">G6–G7 checked separately</span><span data-lang="zh">G6–G7 单独验证</span></div>
+      </div>
+      <div class="status-item">
+        <div class="status-label"><span class="status-dot amber"></span><span data-lang="en">Human decision</span><span data-lang="zh">人工判断</span></div>
+        <div class="status-value"><span data-lang="en">Review required</span><span data-lang="zh">必须复核</span></div>
+      </div>
+      <div class="status-item">
+        <div class="status-label"><span class="status-dot red"></span><span data-lang="en">Conclusion boundary</span><span data-lang="zh">结论边界</span></div>
+        <div class="status-value"><span data-lang="en">No fraud conclusion</span><span data-lang="zh">不作欺诈结论</span></div>
+      </div>
+      <div class="status-item">
+        <div class="status-label"><span class="status-dot"></span><span data-lang="en">Assurance level</span><span data-lang="zh">保证等级</span></div>
+        <div class="status-value"><span data-lang="en">L1 candidate · L2–L3 not achieved</span><span data-lang="zh">L1 候选 · 尚未达到 L2–L3</span></div>
+      </div>
     </div>
     <div class="grid" id="metrics"></div>
     <h2><span data-lang="en">Integrity gates</span><span data-lang="zh">完整性闸门</span></h2>

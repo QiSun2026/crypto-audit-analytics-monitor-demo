@@ -1,28 +1,31 @@
-# Crypto Audit Analytics Monitor
+# RiskFirewall AI — Risk Control Assurance
 
-An Audit Assurance application built on the domain-neutral **RiskFirewall
-Evidence Integrity Harness**.
+**Transactions, Processes & AI Actions · Third Line**
 
-**Working tagline:** Evidence-grade assurance for high-risk decisions.
+A third-line, evidence-bound assurance Prototype built on the domain-neutral
+**RiskFirewall Evidence Integrity Harness**.
 
-`Firewall` refers to evidence-pack admission. Integrity drift fails closed
-before export. The project does not block transactions, launches, employees or
-AI agents.
+`Firewall` refers only to evidence-pack admission: integrity drift stops
+evidence export. It does not block transactions, launches, employees or agent
+actions. `RiskFirewall AI` names the audited AI-action domain and an
+agent-ready target workflow; this verified release does not use a live AI or
+Agent to execute tests or make decisions.
 
-## Offline bilingual demo
+## Five-minute bilingual Demo
 
 Open [demo/index.html](demo/index.html) directly after cloning. The landing page
-offers two fabricated cases:
+explains one product, two synthetic assurance cases and one controlled workflow
+view:
 
-1. **Commission assurance:** full-population wallet and commission tests,
-   bounded samples, false positives, lineage and worked human reviews.
-2. **AI agent action assurance:** one deterministic rule checks whether an
-   irreversible action binds to an exact, valid human approval payload.
+1. **Wallet and commission review:** full-population tests, bounded samples,
+   false positives, lineage and worked human-review fixtures.
+2. **AI action approval review:** deterministic testing of whether an
+   irreversible action binds to the exact, valid human approval payload.
+3. **Controlled workflow view of Case 1:** a frozen human mandate, allowlisted
+   execution, source-cited deterministic drafting, human-only dispositions and
+   an unsigned conclusion draft. This is not a third case.
 
-The second case treats AI-agent activity as the audited subject. No model
-performs detection, classification, threshold setting or decision-making.
-
-To regenerate all three pages:
+To regenerate all four pages:
 
 ```powershell
 $env:PYTHONPATH = "src"
@@ -31,8 +34,6 @@ start demo\index.html
 ```
 
 ## Shared evidence contract
-
-Both cases use the same domain-neutral mechanisms:
 
 ```text
 Pre-commitment
@@ -43,11 +44,10 @@ Pre-commitment
 ```
 
 The [Evidence Contract](EVIDENCE_CONTRACT.md) defines Gate Profile v0.1 and
-four cumulative, non-compensating assurance levels. Each evidence pack is an
-L1 release candidate until G6 and G7 pass against the committed artifacts.
-The repository demonstrates `L1_deterministic_recomputation` on fabricated
-data only after that release harness passes. It does not authenticate real
-sources or provide independent external assurance.
+four cumulative, non-compensating assurance levels. The release harness
+demonstrates `L1_deterministic_recomputation` on fabricated, hash-bound inputs.
+It does not authenticate real sources or provide independent external
+validation.
 
 ## What the commission case demonstrates
 
@@ -58,18 +58,36 @@ sources or provide independent external assurance.
   items;
 - seeded positive, negative and designed-false-positive controls;
 - snapshot hashes, control totals, versioned SQL and exact source-row lineage;
-- three worked review cases in an append-only, hash-chained record.
+- four append-only, hash-chained review records across three worked cases,
+  including one correction that preserves the superseded record.
 
-## What the agent-action case demonstrates
+## What the AI-action case demonstrates
 
 - one fabricated action table and one fabricated approval table;
-- one versioned SQL rule;
-- exact approval-payload hash binding;
+- one versioned SQL rule and exact approval-payload hash binding;
 - explicit missing, denied, mismatched and expired approval signals;
 - reversible and correctly approved actions retained as visible context;
 - no production enforcement and no automated conclusion;
 - no test of approval uniqueness, revocation, consumption or one-time use;
 - an initialized review chain with zero human records and no disposition.
+
+AI-agent activity is the audited subject. No model performs detection,
+classification, threshold setting or decision-making.
+
+## What the bounded workflow demonstrates
+
+The [Bounded Agentic Workflow](BOUNDED_AGENTIC_WORKFLOW.md) is a deterministic
+control-plane simulation on the commission case:
+
+- a human-authored mandate binds scope, thresholds and prohibitions;
+- an exact plan is frozen before one allowlisted deterministic test runs;
+- a deterministic fixture drafts source-cited explanations and questions;
+- raw fixture inputs and outputs remain replayable and hash-bound;
+- append-only human-review fixtures are the only source of dispositions;
+- the resulting conclusion remains an unsigned, bounded draft.
+
+The fixture proves the workflow controls and replay contract. It does not
+establish external Agent execution, model performance or autonomous auditing.
 
 ## Safety boundary
 
@@ -80,7 +98,8 @@ This repository:
 - does not recommend a real organizational threshold;
 - does not provide authentication, real-time monitoring or production access
   controls;
-- does not make an HR, legal, payment, launch or blocking decision.
+- does not make an HR, legal, payment, launch or blocking decision;
+- does not sign an audit opinion or assurance conclusion.
 
 Do not submit real employee, affiliate, wallet, payment, agent-action or
 investigation data.
@@ -93,10 +112,13 @@ sql/                    Three deterministic SQL rules
 src/crypto_audit_monitor/harness/
                         Domain-neutral evidence-integrity mechanisms
 src/crypto_audit_monitor/
-                        Two synthetic applications and renderers
+                        Synthetic cases, bounded workflow and renderers
 tests/                  Deterministic and adversarial release checks
-demo/                   Offline bilingual landing page and two cases
+demo/                   Offline bilingual landing page and case views
 EVIDENCE_CONTRACT.md    Gate profile and assurance vocabulary
+BOUNDED_AGENTIC_WORKFLOW.md
+                        Human/automation authority boundary
+REVIEW_SCOPE.md         Exact release-review and version boundary
 ```
 
 ## Verification
@@ -106,14 +128,13 @@ $env:PYTHONPATH = "src"
 python -m pytest -q
 ```
 
-GitHub Actions runs the same release harness on each push and pull request.
+GitHub Actions runs the same released test suite on each push and pull request.
 
 ## License
 
-Release 0.2.0 in this repository is provided under the
-[Apache License 2.0](LICENSE). Earlier copies distributed under MIT remain
-governed by their applicable MIT terms; this release does not revoke those
-rights.
+Release 0.3.0 is provided under the [Apache License 2.0](LICENSE). Earlier
+copies distributed under MIT remain governed by their applicable MIT terms;
+this release does not revoke those rights.
 
 The license provides no warranty and does not validate this Prototype for real
 employee monitoring, audit conclusions or automated decisions.

@@ -1,33 +1,42 @@
-# Public prototype scope
+# RiskFirewall AI — Risk Control Assurance
 
-RiskFirewall is an evidence-grade assurance prototype for high-risk decisions.
-This public package demonstrates a shared Evidence Integrity Harness through
-two fabricated, offline cases:
+Descriptor: **Transactions, Processes & AI Actions · Third Line**
 
-1. full-population wallet and commission testing; and
-2. exact human-approval binding for irreversible AI-agent actions.
-
-Both cases use deterministic rules, hash-bound artifacts, explicit exceptions,
-visible non-exception context and a required human decision boundary.
+This Public Prototype reviews risk controls and their evidence. It does not
+claim full Operational Risk or AML coverage.
 
 ## Included
 
-- Python, SQLite and versioned SQL;
-- fabricated CSV/JSON inputs and deterministic evidence packs;
+- a domain-neutral Evidence Integrity Harness;
+- fabricated wallet and commission assurance case;
+- fabricated AI-action approval-binding case;
+- one bounded workflow view of the commission case;
+- Python, SQLite and versioned deterministic SQL;
 - bilingual offline HTML demonstrations;
 - G1-G8 evidence-contract checks;
 - full-population versus bounded-sample comparison;
-- append-only human-review records.
+- append-only human-review fixtures;
+- fixed-allowlist Private-to-Public release manifest.
+
+## Automation boundary
+
+The bounded workflow is human-directed, workflow-executed and agent-ready.
+This verified release does not use a live AI or Agent. A deterministic fixture
+proposes one plan and drafts source-cited text; it cannot change scope,
+thresholds, source data, exception status or conclusions.
+
+Only human-review records may close, keep open or escalate an exception. The
+conclusion artifact remains unsigned and is not an audit opinion.
 
 ## Explicitly excluded
 
 - real employee, wallet, customer or client data;
 - live feeds, production access, transaction or agent-action blocking;
-- machine-learning detection or AI-generated audit conclusions;
-- automated discipline, payment, launch or legal decisions;
-- claims of source authentication or independent external validation.
+- machine-learning detection or external-model execution;
+- automated discipline, payment, launch, legal or assurance decisions;
+- source authentication or independent external validation;
+- a complete Operational Risk, AML or case-management platform.
 
-The generated evidence packs are L1 release candidates on fabricated,
-hash-bound inputs until G6 and G7 pass against the committed artifacts.
-L2 source authentication and L3 external validation remain explicitly
-unachieved.
+The released evidence packs demonstrate deterministic recomputation on
+fabricated, hash-bound inputs. L2 source authentication and L3 external
+validation remain explicitly unachieved.

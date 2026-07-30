@@ -331,18 +331,33 @@ def test_agent_action_copy_stays_bounded(tmp_path: Path) -> None:
     assert "no disposition recorded" in visible
     assert "does not test approval uniqueness" in visible
     assert "0 条人工复核记录" in visible
+    assert "approval does not match the action" in visible
+    assert "批准内容与实际操作不一致" in visible
+    assert "what happened:" in visible
+    assert "发生了什么：" in visible
+    assert "next check:" in visible
+    assert "下一步核验：" in visible
 
 
 def test_showcase_is_bilingual_and_links_both_cases() -> None:
     html = render_showcase()
 
-    assert "Commission assurance" in html
-    assert "佣金审计证据" in html
-    assert "AI agent action assurance" in html
-    assert "AI Agent 行为审计" in html
+    assert "One product. Two cases. One shared method." in html
+    assert "一个产品，两个案例，同一套方法。" in html
+    assert "Wallet and commission review" in html
+    assert "钱包与佣金复核" in html
+    assert "Agent action approval review" in html
+    assert "Agent 行为批准复核" in html
+    assert "The workflow view belongs to Case 1" in html
+    assert "工作流视图属于案例 1" in html
     assert "commission_case.html" in html
     assert "agent_action_case.html" in html
-    assert "Evidence Integrity Harness" in html
+    assert "bounded_workflow_case.html" in html
+    assert "RiskFirewall AI — Risk Control Assurance" in html
+    assert "Transactions, Processes &amp; AI Actions · Third Line" in html
+    assert "交易、流程与 AI 行为 · 第三道防线" in html
+    assert "not full Operational Risk or AML coverage" in html
+    assert "不声称覆盖完整的操作风险或反洗钱职能" in html
 
 
 def test_committed_showcase_and_agent_case_match_fresh_render(

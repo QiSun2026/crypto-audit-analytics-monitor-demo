@@ -1,9 +1,32 @@
-# Crypto Audit Analytics Monitor - Lean MVP Spec
+# RiskFirewall AI — Risk Control Assurance · Lean MVP Spec
 
-The original audit application contract below remains frozen. Version 3 adds
-only the domain-neutral mechanisms defined in `EVIDENCE_CONTRACT.md`, one
-synthetic AI-agent action-log proof and one two-case offline showcase. It does
-not add another commission control or a production platform.
+The original audit application contract below remains frozen. Version 3 added
+the domain-neutral mechanisms defined in `EVIDENCE_CONTRACT.md`, one synthetic
+AI-agent action-log proof and one two-case offline showcase. Version 0.3 adds
+one bounded agentic workflow proof on the existing commission case. It does not
+add another commission control, a third domain or a production platform.
+
+## Authorized v0.3 workflow increment
+
+`Human Audit Mandate -> Planning proposal -> Human freeze -> Allowlisted
+deterministic test -> Source-cited investigation draft -> Human exception
+records -> Unsigned bounded conclusion draft`.
+
+- The human mandate owns scope, provisional thresholds, test allowlist and
+  prohibitions.
+- The plan has no execution authority until the exact hash is frozen.
+- The deterministic workflow can invoke only
+  `commission_full_population_v4`.
+- Drafted claims, questions and unknowns must cite source rows already bound to
+  the exception.
+- Provider output cannot change status, thresholds, dispositions, conclusions
+  or signatures.
+- Validated fixture exchanges are hash-bound to their resulting drafts and
+  retained for replay.
+- Human review records remain the only source of exception dispositions.
+- The conclusion is an unsigned draft based on human records only.
+- v0.3 uses a deterministic fixture provider; no external model or Agent
+  executor is called.
 
 ## Purpose
 

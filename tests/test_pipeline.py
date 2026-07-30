@@ -379,6 +379,101 @@ def test_review_log_appends_and_corrections_supersede(
         append_review_record(path, first, queue_path)
 
 
+def test_review_conclusion_and_disposition_must_be_compatible(
+    completed_run: tuple[Path, dict],
+) -> None:
+    output_dir, result = completed_run
+    exception = next(
+        item
+        for item in result["exceptions"]
+        if item["bucket"] == "potential_exception"
+    )
+    record = {
+        "exception_id": exception["exception_id"],
+        "run_id": exception["run_id"],
+        "snapshot_id": exception["snapshot_id"],
+        "reviewer_id": "reviewer-demo-1",
+        "review_timestamp_utc": "2026-07-30T13:00:00Z",
+        "question_presented": "Is enough evidence present to close this item?",
+        "conclusion": "more_evidence_required",
+        "disposition": "close_with_explanation",
+        "rationale": "This intentionally contradictory pair must be rejected.",
+        "evidence_viewed": exception["source_row_ids"],
+        "identity_status": "self_attested_prototype",
+        "ai_assistance_used": False,
+        "supersedes_review_id": None,
+    }
+
+    with pytest.raises(ValueError, match="incompatible"):
+        append_review_record(
+            output_dir / "review_log.jsonl",
+            record,
+            output_dir / "exception_queue.json",
+        )
+
+
+def test_later_review_must_supersede_current_active_record(
+    completed_run: tuple[Path, dict],
+) -> None:
+    output_dir, result = completed_run
+    path = output_dir / "review_log.jsonl"
+    queue_path = output_dir / "exception_queue.json"
+    exception = next(
+        item
+        for item in result["exceptions"]
+        if item["bucket"] == "potential_exception"
+    )
+    base = {
+        "exception_id": exception["exception_id"],
+        "run_id": exception["run_id"],
+        "snapshot_id": exception["snapshot_id"],
+        "reviewer_id": "reviewer-demo-1",
+        "review_timestamp_utc": "2026-07-30T13:00:00Z",
+        "question_presented": "Is the relationship explained?",
+        "conclusion": "more_evidence_required",
+        "disposition": "keep_open",
+        "rationale": "Supporting evidence is pending.",
+        "evidence_viewed": exception["source_row_ids"],
+        "identity_status": "self_attested_prototype",
+        "ai_assistance_used": False,
+        "supersedes_review_id": None,
+    }
+    first = append_review_record(path, base, queue_path)
+
+    unlinked = dict(base)
+    unlinked.update(
+        {
+            "review_timestamp_utc": "2026-07-30T14:00:00Z",
+            "rationale": "An unlinked second review cannot replace the first.",
+        }
+    )
+    with pytest.raises(ValueError, match="must supersede"):
+        append_review_record(path, unlinked, queue_path)
+
+    correction = dict(base)
+    correction.update(
+        {
+            "review_timestamp_utc": "2026-07-30T14:00:00Z",
+            "conclusion": "control_exception_confirmed",
+            "disposition": "escalate_for_investigation",
+            "rationale": "The exception is confirmed for escalation.",
+            "supersedes_review_id": first["review_id"],
+        }
+    )
+    append_review_record(path, correction, queue_path)
+
+    branch = dict(correction)
+    branch.update(
+        {
+            "review_timestamp_utc": "2026-07-30T15:00:00Z",
+            "rationale": "A branch from the superseded first record is invalid.",
+            "supersedes_review_id": first["review_id"],
+        }
+    )
+    with pytest.raises(ValueError, match="branch|current active"):
+        append_review_record(path, branch, queue_path)
+
+
 def test_review_correction_cannot_cross_exception_or_move_back_in_time(
     completed_run: tuple[Path, dict],
 ) -> None:

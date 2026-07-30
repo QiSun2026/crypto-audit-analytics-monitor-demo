@@ -1,4 +1,4 @@
-# Security and Responsible Disclosure
+# RiskFirewall AI — Security and Responsible Disclosure
 
 This is a fabricated-data portfolio Prototype, not a production monitoring or
 runtime-control service.

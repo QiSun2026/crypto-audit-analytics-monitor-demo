@@ -16,6 +16,7 @@ from .precommitment import (
     verify_rule_override,
 )
 from .review_chain import (
+    active_review_records,
     append_review_record,
     initialize_review_chain,
     read_review_log,
@@ -24,6 +25,7 @@ from .review_chain import (
 
 __all__ = [
     "APPROVED_CONCLUSIONS",
+    "active_review_records",
     "append_review_record",
     "assurance_profile",
     "build_artifact_manifest",
