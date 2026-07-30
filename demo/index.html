@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en" data-language="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RiskFirewall Evidence Integrity Harness</title>
+<style>
+:root {
+  --ink:#17232c; --muted:#61717d; --page:#f3f6f5; --paper:#ffffff;
+  --line:#d5dedc; --blue:#2e5f8c; --blue-soft:#e7eef7;
+  --green:#176b43; --green-soft:#dff5e7; --amber:#8a570c;
+  --amber-soft:#fff1c7; --red:#a23c34; --red-soft:#fde5e2;
+  --radius:18px;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--page); color:var(--ink);
+  font-family:Inter,"Segoe UI",Arial,"Microsoft YaHei","PingFang SC",sans-serif;
+}
+a { color:inherit; }
+button,select,a { font:inherit; }
+.top {
+  min-height:76px; display:flex; align-items:center; justify-content:space-between;
+  gap:24px; padding:14px clamp(20px,4vw,64px); background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5;
+}
+.brand { font-weight:800; font-size:20px; text-decoration:none; white-space:nowrap; }
+.tools { display:flex; align-items:center; gap:12px; color:var(--muted); font-weight:700; }
+select { min-width:118px; padding:10px 34px 10px 14px; border:1px solid #aebbb8;
+  border-radius:999px; color:var(--ink); background:white; }
+main { width:min(1320px,calc(100% - 40px)); margin:0 auto; padding:56px 0 72px; }
+.back { display:inline-flex; min-height:44px; align-items:center; gap:8px; padding:0 16px;
+  border-radius:999px; background:var(--blue-soft); color:#244f78; font-weight:800;
+  text-decoration:none; }
+.hero { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);
+  gap:42px; align-items:center; min-height:420px; }
+.hero h1 { font-size:clamp(46px,7vw,88px); line-height:.98; letter-spacing:-.035em;
+  margin:0 0 24px; max-width:13ch; }
+.lede { color:var(--muted); font-size:clamp(19px,2vw,25px); line-height:1.55;
+  max-width:62ch; margin:0; }
+.flow { background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+  padding:30px; }
+.flow h2 { margin:0 0 18px; font-size:20px; }
+.flow ol { list-style:none; padding:0; margin:0; display:grid; gap:0; }
+.flow li { display:grid; grid-template-columns:36px 1fr; gap:14px; align-items:center;
+  min-height:58px; border-bottom:1px solid var(--line); }
+.flow li:last-child { border:0; }
+.flow b { width:32px; height:32px; display:grid; place-items:center; border-radius:50%;
+  background:var(--blue-soft); color:var(--blue); }
+.section { margin-top:64px; }
+.section h2 { font-size:clamp(30px,4vw,50px); margin:0 0 12px; letter-spacing:-.035em; }
+.section-intro { color:var(--muted); font-size:18px; line-height:1.6; max-width:72ch; margin:0 0 28px; }
+.case-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:22px; }
+.case { display:flex; flex-direction:column; min-height:330px; padding:30px;
+  border:1px solid var(--line); border-radius:var(--radius); background:var(--paper);
+  text-decoration:none; transition:transform .18s ease,border-color .18s ease; }
+.case:hover { transform:translateY(-3px); border-color:#91a9bd; }
+.case:active { transform:translateY(-1px); }
+.case:focus-visible,.back:focus-visible,select:focus-visible { outline:3px solid #7aa7cd; outline-offset:3px; }
+.case.agent { background:#eef3f8; }
+.case h3 { font-size:clamp(29px,3vw,42px); line-height:1.05; margin:38px 0 16px;
+  max-width:15ch; letter-spacing:-.035em; }
+.case p { color:var(--muted); font-size:18px; line-height:1.55; margin:0; max-width:54ch; }
+.case footer { margin-top:auto; display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding-top:28px; font-weight:800; color:var(--blue); }
+.tag { display:inline-flex; width:max-content; min-height:36px; align-items:center;
+  padding:0 12px; border-radius:999px; background:var(--blue-soft); color:#244f78;
+  font-weight:800; font-size:14px; }
+.tag.green { background:var(--green-soft); color:var(--green); }
+.tag.amber { background:var(--amber-soft); color:var(--amber); }
+.tag.red { background:var(--red-soft); color:var(--red); }
+.case-title { margin:26px 0 8px; font-size:clamp(34px,5vw,62px); letter-spacing:-.04em; }
+.case-copy { color:var(--muted); font-size:20px; line-height:1.55; max-width:72ch; margin:0; }
+.chip-row { display:flex; flex-wrap:wrap; gap:10px; margin:24px 0 0; }
+.metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:34px 0; }
+.metric { padding:24px; border:1px solid var(--line); border-radius:var(--radius); background:white; }
+.metric strong { display:block; font-size:40px; margin-bottom:8px; }
+.metric span { color:var(--muted); line-height:1.35; }
+.metric.green { background:var(--green-soft); border-color:#a8d9ba; color:var(--green); }
+.metric.amber { background:var(--amber-soft); border-color:#e7c66c; color:var(--amber); }
+.metric.blue { background:var(--blue-soft); border-color:#b5cbe0; color:var(--blue); }
+.panel { background:white; border:1px solid var(--line); border-radius:var(--radius);
+  padding:28px; margin-top:18px; }
+.panel h2 { margin:0 0 8px; font-size:28px; }
+.panel>p { margin:0 0 22px; color:var(--muted); line-height:1.55; }
+.gate-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.gate { padding:14px; border-radius:12px; background:var(--green-soft); color:var(--green);
+  font-weight:800; font-size:14px; }
+.gate.release { background:var(--blue-soft); color:var(--blue); }
+.item-list { display:grid; gap:12px; }
+.item { border:1px solid var(--line); border-radius:14px; padding:20px; }
+.item-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.item h3 { margin:0; font-size:20px; overflow-wrap:anywhere; }
+.item p { margin:10px 0 0; color:var(--muted); line-height:1.5; }
+.meta { margin-top:12px; color:var(--muted); font-family:Consolas,monospace; font-size:13px;
+  overflow-wrap:anywhere; }
+.boundary { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.boundary div { padding:22px; border-radius:14px; background:#f7f9f8; }
+.boundary h3 { margin:0 0 10px; }
+.boundary p { margin:0; color:var(--muted); line-height:1.55; }
+[data-lang="zh"] { display:none; }
+html[data-language="zh"] [data-lang="en"] { display:none; }
+html[data-language="zh"] [data-lang="zh"] { display:initial; }
+@media(max-width:900px) {
+  .hero,.case-grid,.boundary { grid-template-columns:1fr; }
+  .hero { min-height:0; }
+  .metrics,.gate-grid { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:560px) {
+  .top { align-items:flex-start; }
+  .tools>span { display:none; }
+  main { width:min(100% - 28px,1320px); padding-top:34px; }
+  .hero h1 { font-size:46px; }
+  .metrics,.gate-grid { grid-template-columns:1fr; }
+  .case { min-height:300px; padding:24px; }
+  .item-head { display:grid; grid-template-columns:1fr; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  .case { transition:none; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html">RiskFirewall</a>
+  <div class="tools">
+    <span>Language / 语言</span>
+    <select id="language" aria-label="Language">
+      <option value="en">English</option>
+      <option value="zh">中文</option>
+    </select>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <h1><span data-lang="en">Evidence before assurance.</span><span data-lang="zh">先验证证据，再形成鉴证结论。</span></h1>
+      <p class="lede"><span data-lang="en">A deterministic, fail-closed harness that binds review items to pre-committed rules, source rows and accountable human decisions. Failed gates stop evidence-pack export; they do not block transactions, employees, launches or agent actions.</span><span data-lang="zh">一个确定性、失败即关闭的证据完整性 Harness，把复核事项绑定到预先承诺的规则、源数据行与可问责的人工决定。闸门失败只会阻止证据包导出，不会阻断交易、员工、产品上线或 Agent 行为。</span></p>
+    </div>
+    <aside class="flow">
+      <h2><span data-lang="en">Evidence contract</span><span data-lang="zh">证据契约</span></h2>
+      <ol>
+        <li><b>1</b><span data-lang="en">Pre-commit the rule</span><span data-lang="zh">预先承诺规则</span></li>
+        <li><b>2</b><span data-lang="en">Run deterministically</span><span data-lang="zh">确定性执行</span></li>
+        <li><b>3</b><span data-lang="en">Fail closed on drift</span><span data-lang="zh">发现漂移即关闭</span></li>
+        <li><b>4</b><span data-lang="en">Bind the evidence pack</span><span data-lang="zh">绑定证据包</span></li>
+        <li><b>5</b><span data-lang="en">Preserve human authority</span><span data-lang="zh">保留人工决定权</span></li>
+      </ol>
+    </aside>
+  </section>
+  <section class="section">
+    <h2><span data-lang="en">Choose an assurance case.</span><span data-lang="zh">选择一个鉴证案例。</span></h2>
+    <p class="section-intro"><span data-lang="en">Two synthetic applications use the same evidence-integrity mechanisms. Their results remain separate and are not combined into a compensating score.</span><span data-lang="zh">两个合成案例使用同一套证据完整性机制。结果彼此独立，不汇总为可补偿的单一分数。</span></p>
+    <div class="case-grid">
+      <a class="case" href="commission_case.html" data-case-link>
+        <span class="tag green"><span data-lang="en">Audit Assurance</span><span data-lang="zh">审计鉴证</span></span>
+        <h3><span data-lang="en">Commission assurance</span><span data-lang="zh">佣金审计证据</span></h3>
+        <p><span data-lang="en">Full-population wallet and commission tests with explicit samples, false positives, lineage and worked human reviews.</span><span data-lang="zh">对钱包与佣金执行全量测试，明确展示抽样、误报、证据血缘和人工复核记录。</span></p>
+        <footer><span data-lang="en">Open case</span><span data-lang="zh">进入案例</span><span aria-hidden="true">→</span></footer>
+      </a>
+      <a class="case agent" href="agent_action_case.html" data-case-link>
+        <span class="tag"><span data-lang="en">AI as audited subject</span><span data-lang="zh">AI 是被审对象</span></span>
+        <h3><span data-lang="en">AI agent action assurance</span><span data-lang="zh">AI Agent 行为审计</span></h3>
+        <p><span data-lang="en">One deterministic rule tests whether irreversible agent actions bind to an exact, valid human approval artifact.</span><span data-lang="zh">一条确定性规则检验不可逆 Agent 行为是否绑定准确且有效的人工批准凭证。</span></p>
+        <footer><span data-lang="en">Open case</span><span data-lang="zh">进入案例</span><span aria-hidden="true">→</span></footer>
+      </a>
+    </div>
+  </section>
+</main>
+<script>
+const params = new URLSearchParams(location.search);
+const initial = params.get('lang') === 'zh-CN' ? 'zh' : 'en';
+const select = document.querySelector('#language');
+function setLanguage(language) {
+  document.documentElement.dataset.language = language;
+  document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+  if (select) select.value = language;
+}
+setLanguage(initial);
+if (select) {
+  select.addEventListener('change', event => {
+    setLanguage(event.target.value);
+    const url = new URL(location.href);
+    if (event.target.value === 'zh') url.searchParams.set('lang','zh-CN');
+    else url.searchParams.delete('lang');
+    history.replaceState(null,'',url);
+  });
+}
+document.querySelectorAll('a[data-case-link]').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    const url = new URL(link.getAttribute('href'), location.href);
+    if (document.documentElement.dataset.language === 'zh') {
+      url.searchParams.set('lang','zh-CN');
+    }
+    location.href = url.href;
+  });
+});
+</script>
+</body>
+</html>

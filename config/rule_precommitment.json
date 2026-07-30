@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "configuration_version_id": "audit-policy-v4",
+  "pipeline_version": "audit-engine-v4",
+  "status": "provisional_expert_judgment_configuration",
+  "committed_at_utc": "2026-07-30T10:10:00Z",
+  "logical_run_at_utc": "2026-07-30T12:00:00Z",
+  "dataset_seed": 20260730,
+  "rules": {
+    "A": {
+      "rule_version_id": "shared-wallet-v1",
+      "sql_file": "sql/rule_a_shared_wallet.sql",
+      "sql_sha256": "7d493e4d22797f0d0d7358dc5688b177e51df5230aa5289fd18d0de1113b8e57"
+    },
+    "B": {
+      "rule_version_id": "commission-integrity-v1",
+      "sql_file": "sql/rule_b_duplicate_split.sql",
+      "sql_sha256": "6f02144e98e816f5062920843f875457fc372048d42abe2a27fbcf6a390844dc"
+    }
+  },
+  "review_threshold_minor": 1000000,
+  "window_days_inclusive": 7,
+  "sample": {
+    "method": "simple_random_without_replacement",
+    "unit": "affiliate_id",
+    "size": 60,
+    "seeds": [117, 241, 509, 887, 1297],
+    "no_extrapolation": true
+  }
+}

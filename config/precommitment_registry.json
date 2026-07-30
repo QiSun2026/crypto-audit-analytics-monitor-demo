@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "configurations": {
+    "agent-action-policy-v1": "c7c2f5a4630dab0909f9d784a7fbb902dba6a43fd8596f0784e2e2f75b6e8e76",
+    "agent-action-policy-v2": "1d27f152e01187caff70ee8c97e03b9d96b543eff7dc4587b7e054cd4ee4e564",
+    "audit-policy-v1": "7f69f8d25cc98c50d23e27cd44629feddb457471069690920a9092f29ad1bc56",
+    "audit-policy-v2": "2ffd4027c0c44a343cc96164b70ec68b26a7d1e23fa1e056302eec2f9ab0fdb1",
+    "audit-policy-v3": "a3c2032734aaac5e5ae4dd829ff3d56d00ed231f1fe349332421095f7fc62cf7",
+    "audit-policy-v4": "5203e026922f808643e13d5a26a1a7b8084948cc52837781163c355018006423"
+  },
+  "note": "A changed configuration requires a new version and a new registered hash in Git history."
+}

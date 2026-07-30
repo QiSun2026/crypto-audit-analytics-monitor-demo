@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crypto-audit-analytics-monitor"
+version = "0.2.0"
+description = "Evidence-integrity harness with deterministic audit assurance examples"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commission Assurance | RiskFirewall</title>
+<style>
+:root {
+  --ink:#172033; --muted:#647084; --line:#d8dee8; --paper:#f6f8fb;
+  --white:#fff; --blue:#2d5f91; --blue-bg:#eaf1f8; --green:#16713b;
+  --green-bg:#e5f6eb; --amber:#8a5400; --amber-bg:#fff2c7;
+  --red:#a12626; --red-bg:#fee7e7; --gray:#536174; --gray-bg:#edf0f4;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--paper); color:var(--ink);
+  font-family:Inter,Segoe UI,Arial,"Microsoft YaHei",sans-serif; }
+header { position:sticky; top:0; z-index:5; background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--line); }
+.top { max-width:1240px; margin:auto; padding:18px 28px 12px;
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.brand { font-size:20px; font-weight:800; white-space:nowrap; flex-shrink:0; }
+.case { padding-left:18px; border-left:1px solid var(--line); font-weight:700; white-space:nowrap; }
+.spacer { flex:1; }
+select { border:1px solid var(--line); border-radius:999px; padding:9px 34px 9px 14px;
+  background:white; color:var(--ink); font-weight:650; }
+nav { max-width:1240px; margin:auto; padding:0 28px 14px; display:flex; gap:8px; flex-wrap:wrap; }
+nav a { color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:8px; }
+nav a:hover { background:var(--blue-bg); color:var(--blue); }
+main { max-width:1240px; margin:auto; padding:34px 28px 72px; }
+.eyebrow { color:var(--blue); font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+h1 { max-width:980px; font-size:clamp(40px,7vw,82px); line-height:.98; letter-spacing:-.035em;
+  margin:18px 0 24px; }
+h2 { font-size:32px; margin:58px 0 10px; letter-spacing:-.025em; }
+.lede { max-width:820px; font-size:21px; line-height:1.55; color:var(--muted); }
+.chips,.filters { display:flex; gap:10px; flex-wrap:wrap; margin:24px 0; }
+.chip,.filter { border:1px solid var(--line); border-radius:999px; padding:9px 14px;
+  background:white; font-weight:750; color:var(--gray); }
+.chip.green { background:var(--green-bg); color:var(--green); border-color:#a9dfba; }
+.chip.amber { background:var(--amber-bg); color:var(--amber); border-color:#f0cc63; }
+.chip.red { background:var(--red-bg); color:var(--red); border-color:#f1b4b4; }
+.filter { cursor:pointer; }
+.filter.active { background:var(--blue); color:white; border-color:var(--blue); }
+.grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.card { background:white; border:1px solid var(--line); border-radius:18px; padding:22px; }
+.metric strong { display:block; font-size:42px; margin-bottom:8px; }
+.metric span { color:var(--muted); }
+.gate-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.gate { background:var(--green-bg); color:var(--green); border:1px solid #a9dfba;
+  border-radius:12px; padding:13px; font-weight:750; }
+.gate.harness { background:var(--blue-bg); color:var(--blue); border-color:#b8cce2; }
+.table-wrap { overflow:auto; background:white; border:1px solid var(--line); border-radius:18px; }
+table { width:100%; border-collapse:collapse; min-width:900px; }
+th,td { text-align:left; padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { color:var(--muted); font-size:13px; letter-spacing:.04em; text-transform:uppercase; }
+.badge { display:inline-block; border-radius:999px; padding:5px 9px; font-size:12px; font-weight:800; }
+.potential_exception { background:var(--amber-bg); color:var(--amber); }
+.expected_shared { background:var(--blue-bg); color:var(--blue); }
+.review-list { display:grid; gap:14px; }
+.review-card { background:white; border:1px solid var(--line); border-radius:18px; padding:20px; }
+.review-head { display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:10px; }
+.review-meta { color:var(--muted); font-size:14px; }
+.review-rationale { line-height:1.55; margin:10px 0 0; }
+.review-correction { border-left:4px solid var(--blue); }
+.high { color:var(--red); } .medium { color:var(--amber); }
+.note { border-left:4px solid var(--blue); background:var(--blue-bg);
+  border-radius:0 14px 14px 0; padding:18px 20px; color:#244b72; line-height:1.55; }
+.boundary { background:var(--gray-bg); border:1px solid var(--line); border-radius:18px; padding:24px;
+  display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.boundary ul { margin:8px 0 0; padding-left:20px; line-height:1.65; }
+code { font-family:"Cascadia Code",Consolas,monospace; font-size:.9em; }
+details { margin-top:6px; } summary { cursor:pointer; color:var(--blue); }
+section[id] { scroll-margin-top:150px; }
+[data-lang="zh"] { display:none; }
+html.lang-zh [data-lang="en"] { display:none; }
+html.lang-zh [data-lang="zh"] { display:initial; }
+@media(max-width:850px) {
+  header { position:static; }
+  .grid,.gate-grid { grid-template-columns:1fr 1fr; }
+  .boundary { grid-template-columns:1fr; }
+  .case { width:100%; border-left:0; padding-left:0; white-space:normal; }
+  nav { flex-wrap:nowrap; overflow-x:auto; }
+  nav a { flex:0 0 auto; }
+  section[id] { scroll-margin-top:18px; }
+}
+@media(max-width:540px) { .grid,.gate-grid { grid-template-columns:1fr; } main,.top,nav { padding-left:18px; padding-right:18px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <a class="brand" href="index.html" data-case-link><span aria-hidden="true">←</span> RiskFirewall</a>
+    <div class="case"><span data-lang="en">Commission assurance</span><span data-lang="zh">佣金审计证据</span></div>
+    <div class="spacer"></div>
+    <label><span data-lang="en">Language</span><span data-lang="zh">语言</span>
+      <select id="language"><option value="en">English</option><option value="zh">中文</option></select>
+    </label>
+  </div>
+  <nav>
+    <a href="#overview"><span data-lang="en">Overview</span><span data-lang="zh">概览</span></a>
+    <a href="#exceptions"><span data-lang="en">Exceptions</span><span data-lang="zh">异常队列</span></a>
+    <a href="#reviews"><span data-lang="en">Worked reviews</span><span data-lang="zh">人工复核示例</span></a>
+    <a href="#sampling"><span data-lang="en">Population vs sample</span><span data-lang="zh">全量与抽样</span></a>
+    <a href="#evidence"><span data-lang="en">Evidence boundary</span><span data-lang="zh">证据边界</span></a>
+  </nav>
+</header>
+<main>
+  <section id="overview">
+    <div class="eyebrow"><span data-lang="en">Commission assurance · controlled synthetic case</span><span data-lang="zh">佣金审计证据 · 受控合成案例</span></div>
+    <h1><span data-lang="en">Commission assurance: test the population, preserve the explanation.</span><span data-lang="zh">佣金审计证据：测试全量总体，保留解释责任。</span></h1>
+    <p class="lede"><span data-lang="en">Deterministic SQL identifies signals in fabricated wallet and commission data. Every item stays tied to its rule, source rows and hash-bound snapshot; only a human may interpret it.</span><span data-lang="zh">确定性 SQL 在编造的钱包与佣金数据中识别信号。每一项都绑定规则、源数据行与哈希绑定的快照；含义只能由人工判断。</span></p>
+    <div class="chips">
+      <span class="chip green"><span data-lang="en">6 run gates passed</span><span data-lang="zh">6 项运行闸门通过</span></span>
+      <span class="chip"><span data-lang="en">2 release tests separate</span><span data-lang="zh">另有 2 项发布测试</span></span>
+      <span class="chip amber"><span data-lang="en">Human review required</span><span data-lang="zh">必须人工复核</span></span>
+      <span class="chip red"><span data-lang="en">No fraud conclusion</span><span data-lang="zh">不作欺诈结论</span></span>
+      <span class="chip green"><span data-lang="en">L1 candidate: deterministic recomputation</span><span data-lang="zh">L1 候选：确定性重算</span></span>
+      <span class="chip"><span data-lang="en">G6-G7 release tests required; L2-L3 not achieved</span><span data-lang="zh">仍需 G6-G7 发布测试；尚未达到 L2-L3</span></span>
+    </div>
+    <div class="grid" id="metrics"></div>
+    <h2><span data-lang="en">Integrity gates</span><span data-lang="zh">完整性闸门</span></h2>
+    <div class="gate-grid" id="gates"></div>
+  </section>
+
+  <section id="exceptions">
+    <h2><span data-lang="en">Exception queue</span><span data-lang="zh">异常队列</span></h2>
+    <p class="lede"><span data-lang="en">A signal is an exception requiring explanation, not proof of misconduct.</span><span data-lang="zh">信号只代表需要解释的异常，不是行为不当的证明。</span></p>
+    <div class="filters">
+      <button class="filter active" data-filter="all" aria-pressed="true"><span data-lang="en">All review items</span><span data-lang="zh">全部复核项</span></button>
+      <button class="filter" data-filter="potential_exception" aria-pressed="false"><span data-lang="en">Potential exceptions</span><span data-lang="zh">潜在异常</span></button>
+      <button class="filter" data-filter="expected_shared" aria-pressed="false"><span data-lang="en">Expected shared</span><span data-lang="zh">预期共享</span></button>
+    </div>
+    <p id="filterCount" aria-live="polite" style="color:var(--muted)"></p>
+    <div class="table-wrap"><table>
+      <caption style="position:absolute;left:-10000px"><span data-lang="en">Evidence items requiring review</span><span data-lang="zh">需要复核的证据项</span></caption>
+      <thead><tr>
+        <th scope="col">ID</th>
+        <th scope="col"><span data-lang="en">Rule</span><span data-lang="zh">规则</span></th>
+        <th scope="col"><span data-lang="en">Route</span><span data-lang="zh">路由</span></th>
+        <th scope="col"><span data-lang="en">Severity</span><span data-lang="zh">严重性</span></th>
+        <th scope="col"><span data-lang="en">Context</span><span data-lang="zh">情境</span></th>
+        <th scope="col"><span data-lang="en">Source rows</span><span data-lang="zh">源数据行</span></th>
+      </tr></thead>
+      <tbody id="exceptionRows"></tbody>
+    </table></div>
+  </section>
+
+  <section id="reviews">
+    <h2><span data-lang="en">Worked human reviews</span><span data-lang="zh">人工复核示例</span></h2>
+    <p class="lede"><span data-lang="en">Three fabricated cases demonstrate a substantiated exception, a closed designed false positive, and an append-only correction. Reviewer identity is self-attested for this prototype.</span><span data-lang="zh">三个编造案例分别演示已确认控制异常、关闭的设计误报，以及只追加的更正记录。原型中的复核人身份仅为自我声明。</span></p>
+    <div class="review-list" id="reviewRows"></div>
+  </section>
+
+  <section id="sampling">
+    <h2><span data-lang="en">Full population vs bounded sample</span><span data-lang="zh">全量总体与有限抽样</span></h2>
+    <div class="note"><span data-lang="en">Observed synthetic results only. Samples use the affiliate as the unit, fixed size and pre-committed seeds. No confidence, detection probability or real-world inference is claimed.</span><span data-lang="zh">仅报告合成数据中的观测结果。抽样以 affiliate 为单位，样本量与 seeds 均预先固定；不声称置信度、检出概率或真实世界外推。</span></div>
+    <div class="table-wrap" style="margin-top:18px"><table>
+      <caption style="position:absolute;left:-10000px"><span data-lang="en">Full population versus bounded sample results</span><span data-lang="zh">全量总体与有限抽样结果</span></caption>
+      <thead><tr>
+        <th scope="col">Seed</th>
+        <th scope="col"><span data-lang="en">Sample unit</span><span data-lang="zh">抽样单位</span></th>
+        <th scope="col"><span data-lang="en">Sample size</span><span data-lang="zh">样本量</span></th>
+        <th scope="col"><span data-lang="en">Observed caught</span><span data-lang="zh">实际捕获</span></th>
+        <th scope="col"><span data-lang="en">Observed missed</span><span data-lang="zh">实际漏过</span></th>
+        <th scope="col"><span data-lang="en">Affiliate sampling-frame coverage</span><span data-lang="zh">Affiliate 抽样框覆盖</span></th>
+      </tr></thead>
+      <tbody id="sampleRows"></tbody>
+    </table></div>
+  </section>
+
+  <section id="evidence">
+    <h2><span data-lang="en">Evidence and authority boundary</span><span data-lang="zh">证据与权限边界</span></h2>
+    <div class="boundary">
+      <div><strong><span data-lang="en">What this run establishes</span><span data-lang="zh">本次运行能够证明</span></strong>
+        <ul>
+          <li><span data-lang="en">The fabricated population reconciled.</span><span data-lang="zh">编造的测试总体已完成对账。</span></li>
+          <li><span data-lang="en">Rules and thresholds were hash-bound before the logical run; the time order is self-attested, not externally timestamped.</span><span data-lang="zh">规则与阈值在逻辑运行前完成哈希绑定；时间顺序属于自我声明，并无外部时间戳证明。</span></li>
+          <li><span data-lang="en">Seeded positive and negative controls behaved as declared.</span><span data-lang="zh">预设正负控制按声明运行。</span></li>
+          <li><span data-lang="en">Each signal resolves to exact source rows.</span><span data-lang="zh">每个信号均可追溯到准确源数据行。</span></li>
+        </ul>
+      </div>
+      <div><strong><span data-lang="en">What remains human or unknown</span><span data-lang="zh">仍需人工或保持未知</span></strong>
+        <ul>
+          <li><span data-lang="en">Whether any relationship is legitimate, erroneous or misconduct.</span><span data-lang="zh">关系属于合理、错误还是行为不当。</span></li>
+          <li><span data-lang="en">Whether a real data population is complete or identity-resolved.</span><span data-lang="zh">真实数据总体是否完整、身份是否准确解析。</span></li>
+          <li><span data-lang="en">Legal basis, proportionality, retention and employee notice.</span><span data-lang="zh">合法依据、比例原则、留存与员工告知。</span></li>
+          <li><span data-lang="en">Any HR, legal, payment or control action.</span><span data-lang="zh">任何人事、法律、付款或控制行动。</span></li>
+        </ul>
+      </div>
+    </div>
+    <p style="color:var(--muted); margin-top:18px"><code>RUN-7baa3c57624221ac76b3</code> · self_attested_prototype · automated_action=none</p>
+  </section>
+</main>
+<script>
+const model = {"comparison": {"population_affiliates": 2000, "population_potential_exceptions": 6, "population_signal_hits": 13, "sample_method": "simple_random_without_replacement", "sample_runs": [{"observed_exception_ids": [], "observed_missed_population_cases": 6, "observed_population_coverage_percent": 3.0, "observed_potential_exceptions": 0, "population_exceptions_in_sample_frame": 0, "sample_size": 60, "sample_unit": "affiliate_id", "seed": 117, "selected_affiliate_ids": ["A0015", "A0066", "A0138", "A0163", "A0231", "A0241", "A0263", "A0292", "A0325", "A0328", "A0336", "A0337", "A0354", "A0372", "A0374", "A0430", "A0475", "A0492", "A0678", "A0704", "A0715", "A0768", "A0791", "A0796", "A0819", "A0833", "A0849", "A0866", "A0871", "A0890", "A0894", "A0906", "A0936", "A0991", "A1080", "A1128", "A1144", "A1160", "A1209", "A1214", "A1273", "A1275", "A1304", "A1310", "A1315", "A1344", "A1438", "A1441", "A1467", "A1489", "A1519", "A1661", "A1727", "A1816", "A1851", "A1855", "A1879", "A1928", "A1942", "A1998"]}, {"observed_exception_ids": [], "observed_missed_population_cases": 6, "observed_population_coverage_percent": 3.0, "observed_potential_exceptions": 0, "population_exceptions_in_sample_frame": 0, "sample_size": 60, "sample_unit": "affiliate_id", "seed": 241, "selected_affiliate_ids": ["A0029", "A0112", "A0132", "A0200", "A0213", "A0273", "A0284", "A0309", "A0313", "A0331", "A0338", "A0346", "A0357", "A0462", "A0480", "A0484", "A0532", "A0548", "A0701", "A0722", "A0726", "A0728", "A0731", "A1025", "A1047", "A1094", "A1098", "A1118", "A1174", "A1222", "A1229", "A1265", "A1289", "A1313", "A1331", "A1342", "A1348", "A1407", "A1410", "A1430", "A1437", "A1456", "A1478", "A1514", "A1532", "A1543", "A1617", "A1687", "A1699", "A1701", "A1737", "A1739", "A1772", "A1786", "A1854", "A1892", "A1930", "A1957", "A1975", "A1976"]}, {"observed_exception_ids": [], "observed_missed_population_cases": 6, "observed_population_coverage_percent": 3.0, "observed_potential_exceptions": 0, "population_exceptions_in_sample_frame": 0, "sample_size": 60, "sample_unit": "affiliate_id", "seed": 509, "selected_affiliate_ids": ["A0043", "A0062", "A0095", "A0105", "A0141", "A0234", "A0256", "A0272", "A0275", "A0333", "A0337", "A0343", "A0404", "A0424", "A0431", "A0455", "A0558", "A0560", "A0564", "A0632", "A0634", "A0645", "A0681", "A0791", "A0795", "A0862", "A0869", "A0927", "A0987", "A1013", "A1024", "A1025", "A1031", "A1072", "A1135", "A1148", "A1192", "A1212", "A1215", "A1236", "A1266", "A1312", "A1352", "A1356", "A1357", "A1419", "A1439", "A1441", "A1444", "A1555", "A1565", "A1602", "A1653", "A1682", "A1692", "A1738", "A1823", "A1835", "A1877", "A1920"]}, {"observed_exception_ids": [], "observed_missed_population_cases": 6, "observed_population_coverage_percent": 3.0, "observed_potential_exceptions": 0, "population_exceptions_in_sample_frame": 0, "sample_size": 60, "sample_unit": "affiliate_id", "seed": 887, "selected_affiliate_ids": ["A0138", "A0159", "A0206", "A0221", "A0307", "A0343", "A0371", "A0388", "A0403", "A0412", "A0433", "A0461", "A0498", "A0529", "A0534", "A0566", "A0589", "A0658", "A0682", "A0708", "A0779", "A0848", "A0910", "A0946", "A0970", "A0997", "A1000", "A1010", "A1013", "A1017", "A1040", "A1058", "A1077", "A1095", "A1113", "A1194", "A1214", "A1262", "A1279", "A1294", "A1342", "A1395", "A1423", "A1443", "A1458", "A1465", "A1487", "A1577", "A1627", "A1660", "A1677", "A1712", "A1767", "A1811", "A1853", "A1870", "A1892", "A1932", "A1980", "A1997"]}, {"observed_exception_ids": ["EX-b8f5dc8d7a6761b9"], "observed_missed_population_cases": 5, "observed_population_coverage_percent": 3.0, "observed_potential_exceptions": 1, "population_exceptions_in_sample_frame": 1, "sample_size": 60, "sample_unit": "affiliate_id", "seed": 1297, "selected_affiliate_ids": ["A0003", "A0061", "A0086", "A0109", "A0149", "A0192", "A0248", "A0259", "A0290", "A0314", "A0374", "A0414", "A0620", "A0626", "A0664", "A0749", "A0784", "A0791", "A0818", "A0823", "A0864", "A0866", "A0872", "A0897", "A0900", "A0956", "A0960", "A0969", "A0976", "A1016", "A1148", "A1231", "A1233", "A1241", "A1279", "A1294", "A1327", "A1372", "A1399", "A1400", "A1421", "A1426", "A1470", "A1499", "A1530", "A1531", "A1577", "A1605", "A1644", "A1670", "A1733", "A1790", "A1813", "A1831", "A1836", "A1858", "A1929", "A1945", "A1955", "A1960"]}], "sample_size": 60, "sample_unit": "affiliate_id", "sampling_frame_exclusions": "Employee-only wallet signals are outside the affiliate sampling frame. The population run still tests them.", "statement": "Observed synthetic results only. No probability, confidence, recall or real-population inference."}, "exceptions": [{"assertion_hits": ["A"], "bucket": "potential_exception", "control_objective": "CO-01", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-160dc68c21926f8b", "overlapping_pair_count": 1, "review_status": "pending_human_review", "review_threshold_minor": null, "rule_branch": "A", "rule_version_id": "shared-wallet-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "high", "signal_details": [{"rule_branch": "A", "signal_id": "SIG-7fe2de76efdfaa83", "source_row_ids": ["L_A_A0001", "L_E_E0001"]}], "signal_hit_count": 1, "signal_id": "SIG-7fe2de76efdfaa83", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_row_ids": ["L_A_A0001", "L_E_E0001"], "threshold_status": "provisional_expert_judgment_configuration", "wallet_id": "W_CASE_A1", "wallet_type": "self_custody", "window_days_inclusive": null}, {"assertion_hits": ["A"], "bucket": "expected_shared", "control_objective": "CO-01", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-2f05f95534d610aa", "overlapping_pair_count": 780, "review_status": "context_only", "review_threshold_minor": null, "rule_branch": "A", "rule_version_id": "shared-wallet-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "informational", "signal_details": [{"rule_branch": "A", "signal_id": "SIG-7eefcfa54fa04683", "source_row_ids": ["L_A_A0010", "L_A_A0011", "L_A_A0012", "L_A_A0013", "L_A_A0014", "L_A_A0015", "L_A_A0016", "L_A_A0017", "L_A_A0018", "L_A_A0019", "L_A_A0020", "L_A_A0021", "L_A_A0022", "L_A_A0023", "L_A_A0024", "L_A_A0025", "L_A_A0026", "L_A_A0027", "L_A_A0028", "L_A_A0029", "L_A_A0030", "L_A_A0031", "L_A_A0032", "L_A_A0033", "L_A_A0034", "L_A_A0035", "L_A_A0036", "L_A_A0037", "L_A_A0038", "L_A_A0039", "L_A_A0040", "L_A_A0041", "L_A_A0042", "L_A_A0043", "L_A_A0044", "L_A_A0045", "L_A_A0046", "L_A_A0047", "L_A_A0048", "L_A_A0049"]}], "signal_hit_count": 1, "signal_id": "SIG-7eefcfa54fa04683", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_row_ids": ["L_A_A0010", "L_A_A0011", "L_A_A0012", "L_A_A0013", "L_A_A0014", "L_A_A0015", "L_A_A0016", "L_A_A0017", "L_A_A0018", "L_A_A0019", "L_A_A0020", "L_A_A0021", "L_A_A0022", "L_A_A0023", "L_A_A0024", "L_A_A0025", "L_A_A0026", "L_A_A0027", "L_A_A0028", "L_A_A0029", "L_A_A0030", "L_A_A0031", "L_A_A0032", "L_A_A0033", "L_A_A0034", "L_A_A0035", "L_A_A0036", "L_A_A0037", "L_A_A0038", "L_A_A0039", "L_A_A0040", "L_A_A0041", "L_A_A0042", "L_A_A0043", "L_A_A0044", "L_A_A0045", "L_A_A0046", "L_A_A0047", "L_A_A0048", "L_A_A0049"], "threshold_status": "provisional_expert_judgment_configuration", "wallet_id": "W_EXPECTED_EXCHANGE", "wallet_type": "exchange_deposit", "window_days_inclusive": null}, {"accrual_period": "2026-Q1", "affected_affiliate_ids": ["A0100"], "affiliate_id": "A0100", "affiliate_id_a": "A0100", "affiliate_id_b": "A0100", "amount_minor_a": null, "amount_minor_b": null, "assertion_hits": ["B1", "B2"], "bucket": "potential_exception", "control_objective": "CO-02", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-5ac54b769a024f05", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-02", "payment_count": 2, "payment_id_a": null, "payment_id_b": null, "qualifying_window_count": 1, "review_status": "pending_human_review", "review_threshold_minor": 1000000, "rule_branch": "B1+B2", "rule_version_id": "commission-integrity-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "high", "signal_details": [{"accrual_period": "2026-Q1", "affiliate_id": "A0100", "affiliate_id_a": "A0100", "affiliate_id_b": "A0100", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-02", "payment_count": 2, "qualifying_window_count": 1, "rule_branch": "B2", "signal_id": "SIG-520950e418b02a05", "source_row_ids": ["P_A0100_1", "P_A0100_2"], "total_amount_minor": 1500000}, {"accrual_period": "2026-Q1", "affiliate_id": "A0100", "affiliate_id_a": "A0100", "affiliate_id_b": "A0100", "payment_id_a": "P_A0100_1", "payment_id_b": "P_A0100_2", "rule_branch": "B1", "signal_id": "SIG-f5d85ec9b3892a4e", "source_ref_a": "SRC_T_B1", "source_ref_b": "SRC_T_B1", "source_row_ids": ["P_A0100_1", "P_A0100_2"]}], "signal_hit_count": 2, "signal_id": "SIG-520950e418b02a05", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_ref_a": null, "source_ref_b": null, "source_row_ids": ["P_A0100_1", "P_A0100_2"], "threshold_status": "provisional_expert_judgment_configuration", "total_amount_minor": 1500000, "window_days_inclusive": 7}, {"accrual_period": "2026-Q1", "affected_affiliate_ids": ["A0102"], "affiliate_id": "A0102", "affiliate_id_a": "A0102", "affiliate_id_b": "A0102", "amount_minor_a": null, "amount_minor_b": null, "assertion_hits": ["B1", "B2"], "bucket": "potential_exception", "control_objective": "CO-02", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-5ea200196b3dfb8e", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-08", "payment_count": 2, "payment_id_a": null, "payment_id_b": null, "qualifying_window_count": 1, "review_status": "pending_human_review", "review_threshold_minor": 1000000, "rule_branch": "B1+B2", "rule_version_id": "commission-integrity-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "high", "signal_details": [{"accrual_period": "2026-Q1", "affiliate_id": "A0102", "affiliate_id_a": "A0102", "affiliate_id_b": "A0102", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-08", "payment_count": 2, "qualifying_window_count": 1, "rule_branch": "B2", "signal_id": "SIG-4826008ecc92eed1", "source_row_ids": ["P_A0102_1", "P_A0102_2"], "total_amount_minor": 1000000}, {"accrual_period": "2026-Q1", "affiliate_id": "A0102", "affiliate_id_a": "A0102", "affiliate_id_b": "A0102", "payment_id_a": "P_A0102_1", "payment_id_b": "P_A0102_2", "rule_branch": "B1", "signal_id": "SIG-c4c05d4203846318", "source_ref_a": "SRC_T_B3_1", "source_ref_b": "SRC_T_B3_2", "source_row_ids": ["P_A0102_1", "P_A0102_2"]}], "signal_hit_count": 2, "signal_id": "SIG-4826008ecc92eed1", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_ref_a": null, "source_ref_b": null, "source_row_ids": ["P_A0102_1", "P_A0102_2"], "threshold_status": "provisional_expert_judgment_configuration", "total_amount_minor": 1000000, "window_days_inclusive": 7}, {"accrual_period": "2026-Q1", "affected_affiliate_ids": ["A0104"], "affiliate_id": "A0104", "affiliate_id_a": "A0104", "affiliate_id_b": "A0104", "amount_minor_a": null, "amount_minor_b": null, "assertion_hits": ["B2"], "bucket": "potential_exception", "control_objective": "CO-02", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-5fe098d9adbf7e90", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-04", "payment_count": 2, "payment_id_a": null, "payment_id_b": null, "qualifying_window_count": 1, "review_status": "pending_human_review", "review_threshold_minor": 1000000, "rule_branch": "B2", "rule_version_id": "commission-integrity-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "medium", "signal_details": [{"accrual_period": "2026-Q1", "affiliate_id": "A0104", "affiliate_id_a": "A0104", "affiliate_id_b": "A0104", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-04", "payment_count": 2, "qualifying_window_count": 1, "rule_branch": "B2", "signal_id": "SIG-89b5db599eb22d63", "source_row_ids": ["P_A0104_1", "P_A0104_2"], "total_amount_minor": 1100000}], "signal_hit_count": 1, "signal_id": "SIG-89b5db599eb22d63", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_ref_a": null, "source_ref_b": null, "source_row_ids": ["P_A0104_1", "P_A0104_2"], "threshold_status": "provisional_expert_judgment_configuration", "total_amount_minor": 1100000, "window_days_inclusive": 7}, {"assertion_hits": ["A"], "bucket": "expected_shared", "control_objective": "CO-01", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-a422bdf3704e543d", "overlapping_pair_count": 1, "review_status": "context_only", "review_threshold_minor": null, "rule_branch": "A", "rule_version_id": "shared-wallet-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "informational", "signal_details": [{"rule_branch": "A", "signal_id": "SIG-1dac6a46c35b4fd7", "source_row_ids": ["L_E_E0003", "L_E_E0004"]}], "signal_hit_count": 1, "signal_id": "SIG-1dac6a46c35b4fd7", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_row_ids": ["L_E_E0003", "L_E_E0004"], "threshold_status": "provisional_expert_judgment_configuration", "wallet_id": "W_EXPECTED_TREASURY", "wallet_type": "internal_treasury", "window_days_inclusive": null}, {"assertion_hits": ["A"], "bucket": "potential_exception", "control_objective": "CO-01", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-b8f5dc8d7a6761b9", "overlapping_pair_count": 3, "review_status": "pending_human_review", "review_threshold_minor": null, "rule_branch": "A", "rule_version_id": "shared-wallet-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "medium", "signal_details": [{"rule_branch": "A", "signal_id": "SIG-d9c972a816f779ba", "source_row_ids": ["L_A_A0002", "L_A_A0003", "L_A_A0004"]}], "signal_hit_count": 1, "signal_id": "SIG-d9c972a816f779ba", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_row_ids": ["L_A_A0002", "L_A_A0003", "L_A_A0004"], "threshold_status": "provisional_expert_judgment_configuration", "wallet_id": "W_CASE_A2", "wallet_type": "self_custody", "window_days_inclusive": null}, {"accrual_period": "2026-Q1", "affected_affiliate_ids": ["A0101"], "affiliate_id": "A0101", "affiliate_id_a": "A0101", "affiliate_id_b": "A0101", "amount_minor_a": 400000, "amount_minor_b": 400000, "assertion_hits": ["B1", "B2"], "bucket": "potential_exception", "control_objective": "CO-02", "detection_timestamp_utc": "2026-07-30T12:00:00Z", "exception_id": "EX-de391597b1bc13a9", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-05", "payment_count": 3, "payment_id_a": "P_A0101_1", "payment_id_b": "P_A0101_3", "qualifying_window_count": 1, "review_status": "pending_human_review", "review_threshold_minor": 1000000, "rule_branch": "B1+B2", "rule_version_id": "commission-integrity-v1", "run_id": "RUN-7baa3c57624221ac76b3", "severity": "high", "signal_details": [{"accrual_period": "2026-Q1", "affiliate_id": "A0101", "affiliate_id_a": "A0101", "affiliate_id_b": "A0101", "payment_id_a": "P_A0101_1", "payment_id_b": "P_A0101_3", "rule_branch": "B1", "signal_id": "SIG-19995723747a59ce", "source_ref_a": "SRC_T_B2_1", "source_ref_b": "SRC_T_B2_3", "source_row_ids": ["P_A0101_1", "P_A0101_3"]}, {"accrual_period": "2026-Q1", "affiliate_id": "A0101", "affiliate_id_a": "A0101", "affiliate_id_b": "A0101", "payment_id_a": "P_A0101_2", "payment_id_b": "P_A0101_3", "rule_branch": "B1", "signal_id": "SIG-34a80da78fcb30c3", "source_ref_a": "SRC_T_B2_2", "source_ref_b": "SRC_T_B2_3", "source_row_ids": ["P_A0101_2", "P_A0101_3"]}, {"accrual_period": "2026-Q1", "affiliate_id": "A0101", "affiliate_id_a": "A0101", "affiliate_id_b": "A0101", "first_payment_date": "2026-03-01", "last_payment_date": "2026-03-05", "payment_count": 3, "qualifying_window_count": 1, "rule_branch": "B2", "signal_id": "SIG-77d557796ae7492e", "source_row_ids": ["P_A0101_1", "P_A0101_2", "P_A0101_3"], "total_amount_minor": 1200000}, {"accrual_period": "2026-Q1", "affiliate_id": "A0101", "affiliate_id_a": "A0101", "affiliate_id_b": "A0101", "payment_id_a": "P_A0101_1", "payment_id_b": "P_A0101_2", "rule_branch": "B1", "signal_id": "SIG-b5a01fe9f2a5ae46", "source_ref_a": "SRC_T_B2_1", "source_ref_b": "SRC_T_B2_2", "source_row_ids": ["P_A0101_1", "P_A0101_2"]}], "signal_hit_count": 4, "signal_id": "SIG-19995723747a59ce", "signal_statement": "exception requiring explanation", "snapshot_id": "700ec5eef009b0915a703d9e", "source_ref_a": "SRC_T_B2_1", "source_ref_b": "SRC_T_B2_3", "source_row_ids": ["P_A0101_1", "P_A0101_2", "P_A0101_3"], "threshold_status": "provisional_expert_judgment_configuration", "total_amount_minor": 1200000, "window_days_inclusive": 7}], "reviews": [{"ai_assistance_used": false, "conclusion": "control_exception_confirmed", "disposition": "escalate_for_investigation", "evidence_viewed": ["L_A_A0001", "L_E_E0001"], "exception_id": "EX-160dc68c21926f8b", "identity_status": "self_attested_prototype", "previous_record_sha256": "0000000000000000000000000000000000000000000000000000000000000000", "question_presented": "Is the shared self-custody beneficiary relationship documented and authorized?", "question_presented_zh": "该共享自托管受益人关系是否有记录并获授权？", "rationale": "The fabricated source rows contain no documented reason for the shared self-custody wallet. Escalation requests supporting evidence; it is not a misconduct finding.", "rationale_zh": "编造的源数据行没有记录共享自托管钱包的原因。升级仅为索取支持证据，不构成行为不当结论。", "record_sha256": "0cb9a6961331ead58163f2037e429dbde42c880a680d5b627302fd9114cd156f", "review_id": "REV-1a2a762cdcc472d1", "review_timestamp_utc": "2026-07-30T13:00:00Z", "reviewer_id": "portfolio-reviewer-1", "run_id": "RUN-7baa3c57624221ac76b3", "snapshot_id": "700ec5eef009b0915a703d9e", "supersedes_review_id": null}, {"ai_assistance_used": false, "conclusion": "supported_explanation", "disposition": "close_with_explanation", "evidence_viewed": ["P_A0104_1", "P_A0104_2"], "exception_id": "EX-5fe098d9adbf7e90", "identity_status": "self_attested_prototype", "previous_record_sha256": "0cb9a6961331ead58163f2037e429dbde42c880a680d5b627302fd9114cd156f", "question_presented": "Do the split-payment rows represent a duplicate entitlement?", "question_presented_zh": "这些拆分付款是否代表重复权益？", "rationale": "The fabricated rows carry distinct source references and no duplicate transaction. This designed false positive is closed without changing the provisional threshold.", "rationale_zh": "编造的数据行具有不同来源引用，且不存在重复交易。该设计误报在不修改暂定阈值的情况下关闭。", "record_sha256": "796745633874fb85c843e84b24e936ef8c959438d3aedad4e35ea1b44484e861", "review_id": "REV-958b220f746647dd", "review_timestamp_utc": "2026-07-30T13:15:00Z", "reviewer_id": "portfolio-reviewer-1", "run_id": "RUN-7baa3c57624221ac76b3", "snapshot_id": "700ec5eef009b0915a703d9e", "supersedes_review_id": null}, {"ai_assistance_used": false, "conclusion": "more_evidence_required", "disposition": "keep_open", "evidence_viewed": ["P_A0100_1", "P_A0100_2"], "exception_id": "EX-5ac54b769a024f05", "identity_status": "self_attested_prototype", "previous_record_sha256": "796745633874fb85c843e84b24e936ef8c959438d3aedad4e35ea1b44484e861", "question_presented": "Do the two commission rows settle the same entitlement?", "question_presented_zh": "两条佣金记录是否结算同一项权益？", "rationale": "The first pass kept the case open pending a comparison of source references.", "rationale_zh": "首次复核保持案件开放，等待比较来源引用。", "record_sha256": "80e8252d79dd216180fcec1c3fe8ee5b64c180bda81606c171b4c9103920f2d1", "review_id": "REV-4e1fc214f50e6e53", "review_timestamp_utc": "2026-07-30T13:30:00Z", "reviewer_id": "portfolio-reviewer-1", "run_id": "RUN-7baa3c57624221ac76b3", "snapshot_id": "700ec5eef009b0915a703d9e", "supersedes_review_id": null}, {"ai_assistance_used": false, "conclusion": "control_exception_confirmed", "disposition": "escalate_for_investigation", "evidence_viewed": ["P_A0100_1", "P_A0100_2"], "exception_id": "EX-5ac54b769a024f05", "identity_status": "self_attested_prototype", "previous_record_sha256": "80e8252d79dd216180fcec1c3fe8ee5b64c180bda81606c171b4c9103920f2d1", "question_presented": "Do the two commission rows settle the same entitlement?", "question_presented_zh": "两条佣金记录是否结算同一项权益？", "rationale": "Correction: both fabricated payments reuse the same source reference. The earlier keep-open record remains in the chain.", "rationale_zh": "更正：两笔编造付款重复使用同一来源引用。先前的保持开放记录继续保留在审计链中。", "record_sha256": "17b0558f62af966d5023e8ca1fc819e26a97e52aebd3af32f56c65813a76ce31", "review_id": "REV-e1676d05ee61ae2a", "review_timestamp_utc": "2026-07-30T13:45:00Z", "reviewer_id": "portfolio-reviewer-1", "run_id": "RUN-7baa3c57624221ac76b3", "snapshot_id": "700ec5eef009b0915a703d9e", "supersedes_review_id": "REV-4e1fc214f50e6e53"}], "run": {"assurance_profile": {"achieved_level": "L0_declaration_consistency", "claim_status": "release_candidate", "non_compensating": true, "not_achieved": ["L2_source_authenticated", "L3_external_validation"], "note": "The evidence pack is an L1 release candidate on fabricated, hash-bound inputs. G6 and G7 remain release-harness checks; no source authentication or independent external validation.", "pending_release_gates": ["G6_append_only_review_contract", "G7_determinism"], "profile_version": "evidence-assurance-v0.1", "target_level": "L1_deterministic_recomputation"}, "automated_action": "none", "configuration_version_id": "audit-policy-v4", "data_quality_validation": {"duplicate_wallet_address_hash": 0, "invalid_affiliate_status": 0, "invalid_entity_type": 0, "invalid_link_dates": 0, "invalid_payment_domain": 0, "orphan_entity_link": 0, "orphan_wallet_link": 0, "unknown_wallet_type": 0}, "gates": {"G1_snapshot_integrity": "passed", "G2_population_completeness": "passed", "G3_precommitment": "passed", "G4_rule_validation": "passed", "G5_traceability": "passed", "G6_append_only_review_contract": "implemented_requires_release_test", "G7_determinism": "requires_release_test", "G8_bounded_conclusions": "passed"}, "human_decision": "required", "objective_conclusions": {"CO-01": "exceptions_identified", "CO-02": "exceptions_identified"}, "pipeline_version": "audit-engine-v4", "population": {"control_totals": {"commission_amount_minor": 5758480000, "distinct_affiliates": 2000, "distinct_wallets": 2456}, "generator_seed": 20260730, "schema_version": 1, "synthetic_only": true, "tables": {"affiliate": {"file": "source_data/affiliate.csv", "row_count": 2000, "sha256": "ae23d6c6708cf0c369b57b32e4c3a2b69915354dd5d4ce748fb03e11fc2ec3cd"}, "commission_payment": {"file": "source_data/commission_payment.csv", "row_count": 12000, "sha256": "90055e21d52ddbfcc07b198a88dae52827e5a45badfaa2536083aaeda53fe9dd"}, "employee": {"file": "source_data/employee.csv", "row_count": 500, "sha256": "a6d249e2d39cb19679515215a9f12f23c8a7002898e359a261124491c498c580"}, "entity_wallet_link": {"file": "source_data/entity_wallet_link.csv", "row_count": 2500, "sha256": "11c746c08ad35dbec47c6a95c00f17f0f4143f72f0148a539900069d88224224"}, "payout_wallet": {"file": "source_data/payout_wallet.csv", "row_count": 2456, "sha256": "364783a917e97705d919b4f7dbb2c0821af18a060617354b82bffa3a08b2ed6d"}}, "validation_fixture": {"file": "ground_truth.json", "sha256": "128b1d18ed6ab384b25a58d2688050bc32c574613bb6a0924cdd6731fb06c8e5"}}, "precommitment_sha256": "5203e026922f808643e13d5a26a1a7b8084948cc52837781163c355018006423", "review_chain_control": "separate append-only tamper-evident chain; not externally immutable", "reviewer_identity_status": "self_attested_prototype", "routing_counts": {"assertion_hits": 13, "context_items": 2, "potential_assertion_hits": 11, "review_cases": 6}, "rule_validation": {"designed_false_positives_visible": {"F-B2": true}, "expected_shared_visible": {"W_EXPECTED_EXCHANGE": true, "W_EXPECTED_TREASURY": true}, "negative_controls": {"N-A1": true, "N-B1": true, "N-B3": true}, "passed": true, "positive_controls": {"T-A1": true, "T-A2": true, "T-B1": true, "T-B2": true, "T-B3": true}}, "rule_versions": {"A": {"rule_version_id": "shared-wallet-v1", "sql_sha256": "7d493e4d22797f0d0d7358dc5688b177e51df5230aa5289fd18d0de1113b8e57"}, "B": {"rule_version_id": "commission-integrity-v1", "sql_sha256": "6f02144e98e816f5062920843f875457fc372048d42abe2a27fbcf6a390844dc"}}, "run_id": "RUN-7baa3c57624221ac76b3", "run_timestamp_utc": "2026-07-30T12:00:00Z", "schema_version": 1, "snapshot_id": "700ec5eef009b0915a703d9e", "snapshot_manifest_sha256": "700ec5eef009b0915a703d9e7cb95cdbb8d713930e1e58b60ccb6b23cbecfe25", "synthetic_only": true}};
+const q = s => document.querySelector(s);
+const qa = s => [...document.querySelectorAll(s)];
+const routeLabel = v => v === 'potential_exception' ? ['Potential exception','潜在异常'] : ['Expected shared','预期共享'];
+const severityLabel = {
+  high:['high','高'], medium:['medium','中'], informational:['informational','信息项']
+};
+const gateLabel = {
+  G1_snapshot_integrity:['snapshot integrity','快照完整性'],
+  G2_population_completeness:['population completeness','总体完整性'],
+  G3_precommitment:['pre-commitment','预先承诺'],
+  G4_rule_validation:['rule validation','规则验证'],
+  G5_traceability:['traceability','可追溯性'],
+  G6_append_only_review_contract:['append-only review','只追加复核记录'],
+  G7_determinism:['determinism','确定性'],
+  G8_bounded_conclusions:['bounded conclusions','有界结论']
+};
+function t(pair) { return document.documentElement.classList.contains('lang-zh') ? pair[1] : pair[0]; }
+function renderMetrics() {
+  const c = model.run.routing_counts;
+  const items = [
+    [c.assertion_hits,['Assertion hits','规则命中']],
+    [c.potential_assertion_hits,['Potential-exception hits','潜在异常命中']],
+    [c.review_cases,['Unique review cases','独立复核案件']],
+    [c.context_items,['Expected-shared context','预期共享情境']]
+  ];
+  q('#metrics').innerHTML = items.map(x => `<div class="card metric"><strong>${x[0]}</strong><span>${t(x[1])}</span></div>`).join('');
+}
+function renderGates() {
+  q('#gates').innerHTML = Object.entries(model.run.gates).map(([k,v]) => {
+    const passed = v === 'passed';
+    const status = passed ? t(['PASS','通过']) : t(['RELEASE TEST','发布测试']);
+    return `<div class="gate ${passed ? '' : 'harness'}">${passed ? '✓' : '◇'} ${t(gateLabel[k] || [k,k])} · ${status}</div>`;
+  }).join('');
+}
+let activeFilter = 'all';
+function context(e) {
+  if(e.assertion_hits.includes('A')) return `${e.wallet_id} · ${e.overlapping_pair_count} ${t(['overlapping pair(s)','组重叠关系'])}`;
+  return `${e.affiliate_id} · ${e.accrual_period} · ${e.signal_hit_count} ${t(['assertion hit(s)','项规则命中'])}`;
+}
+function formatSources(ids) {
+  const shown = ids.slice(0,4);
+  const more = ids.length - shown.length;
+  if(more <= 0) return shown.join('<br>');
+  return shown.join('<br>') + `<details><summary>+${more} ${t(['more, expand','条，展开'])}</summary>${ids.slice(4).join('<br>')}</details>`;
+}
+function renderExceptions() {
+  const rows = model.exceptions.filter(e => activeFilter === 'all' || e.bucket === activeFilter);
+  q('#exceptionRows').innerHTML = rows.map(e => `<tr>
+    <td><code>${e.exception_id}</code></td><td><strong>${e.rule_branch}</strong><br><code>${e.rule_version_id}</code></td>
+    <td><span class="badge ${e.bucket}">${t(routeLabel(e.bucket))}</span></td>
+    <td class="${e.severity}">${t(severityLabel[e.severity] || [e.severity,e.severity])}</td><td>${context(e)}</td>
+    <td><code>${formatSources(e.source_row_ids)}</code></td></tr>`).join('');
+  q('#filterCount').textContent = t([`${rows.length} review item(s) shown`, `当前显示 ${rows.length} 个复核项`]);
+}
+function renderSamples() {
+  q('#sampleRows').innerHTML = model.comparison.sample_runs.map(s => `<tr><td>${s.seed}</td><td>${s.sample_unit}</td><td>${s.sample_size}</td><td>${s.observed_potential_exceptions}</td><td>${s.observed_missed_population_cases}</td><td>${s.observed_population_coverage_percent}%</td></tr>`).join('');
+}
+const conclusionLabel = {
+  supported_explanation:['Supported explanation','解释有支持'],
+  more_evidence_required:['More evidence required','需要更多证据'],
+  control_exception_confirmed:['Control exception confirmed','已确认控制异常'],
+  data_quality_issue:['Data-quality issue','数据质量问题']
+};
+const dispositionLabel = {
+  keep_open:['Keep open','保持开放'],
+  close_with_explanation:['Close with explanation','有解释关闭'],
+  escalate_for_investigation:['Escalate for investigation','升级调查']
+};
+function renderReviews() {
+  q('#reviewRows').innerHTML = model.reviews.map(r => `<article class="review-card ${r.supersedes_review_id ? 'review-correction' : ''}">
+    <div class="review-head">
+      <strong>${t(conclusionLabel[r.conclusion] || [r.conclusion,r.conclusion])}</strong>
+      <span class="badge ${r.disposition === 'escalate_for_investigation' ? 'potential_exception' : 'expected_shared'}">${t(dispositionLabel[r.disposition] || [r.disposition,r.disposition])}</span>
+    </div>
+    <div class="review-meta"><code>${r.exception_id}</code> · ${r.review_timestamp_utc} · ${r.reviewer_id}</div>
+    <p class="review-rationale"><strong>${t(['Review question','复核问题'])}:</strong> ${t([r.question_presented,r.question_presented_zh || r.question_presented])}</p>
+    <p class="review-rationale">${t([r.rationale,r.rationale_zh || r.rationale])}</p>
+    ${r.supersedes_review_id ? `<div class="review-meta">${t(['Supersedes','更正并取代'])} <code>${r.supersedes_review_id}</code></div>` : ''}
+  </article>`).join('');
+}
+function setLanguage(language) {
+  document.documentElement.classList.toggle('lang-zh', language === 'zh');
+  document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+  q('#language').value = language;
+  renderMetrics(); renderGates(); renderExceptions(); renderReviews();
+}
+q('#language').addEventListener('change', e => {
+  setLanguage(e.target.value);
+  const url = new URL(location.href);
+  if (e.target.value === 'zh') url.searchParams.set('lang','zh-CN');
+  else url.searchParams.delete('lang');
+  history.replaceState(null,'',url);
+});
+qa('a[data-case-link]').forEach(link => link.addEventListener('click', event => {
+  event.preventDefault();
+  const url = new URL(link.getAttribute('href'), location.href);
+  if (document.documentElement.lang === 'zh-CN') url.searchParams.set('lang','zh-CN');
+  location.href = url.href;
+}));
+qa('.filter').forEach(btn => btn.addEventListener('click', () => {
+  activeFilter = btn.dataset.filter; qa('.filter').forEach(x => x.classList.remove('active'));
+  qa('.filter').forEach(x => x.setAttribute('aria-pressed','false'));
+  btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); renderExceptions();
+}));
+setLanguage(new URLSearchParams(location.search).get('lang') === 'zh-CN' ? 'zh' : 'en');
+renderSamples();
+</script>
+</body>
+</html>

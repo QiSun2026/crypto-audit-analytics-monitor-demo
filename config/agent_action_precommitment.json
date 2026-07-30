@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "configuration_version_id": "agent-action-policy-v2",
+  "harness_version": "evidence-integrity-harness-v0.2",
+  "status": "provisional_demonstration_configuration",
+  "committed_at_utc": "2026-07-30T14:00:00Z",
+  "logical_run_at_utc": "2026-07-30T15:00:00Z",
+  "control_objective_id": "CO-AI-01",
+  "control_objective": "Irreversible AI-agent actions are bound to an exact, approved human authorization artifact that is valid when the action executes.",
+  "rule": {
+    "rule_version_id": "agent-action-approval-binding-v1",
+    "sql_file": "sql/rule_c_agent_action_approval.sql",
+    "sql_sha256": "018e11b99134a280536f465f3609d4b1e0998d71116545bc16705855209d4806"
+  },
+  "bounded_conclusions": [
+    "no_exceptions_detected",
+    "exceptions_identified",
+    "not_testable"
+  ],
+  "human_decision": "required",
+  "automated_action": "none"
+}
