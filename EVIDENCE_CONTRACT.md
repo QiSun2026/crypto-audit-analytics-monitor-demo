@@ -6,9 +6,14 @@ Working tagline: **Evidence-grade assurance for high-risk decisions.**
 evidence-pack export. It does not block a transaction, launch, employee action
 or AI-agent action.
 
-## Domain-neutral contract
+## Reuse-oriented contract
 
-Every application must:
+The mechanisms are designed to be domain-neutral. The current release
+demonstrates them only within one third-line Risk Control Assurance
+application, using two synthetic case contexts. Cross-domain reuse has not
+been independently exercised.
+
+Any future application or domain reuse must preserve the same contract:
 
 1. register the exact configuration and rule hashes before the logical run;
 2. execute a deterministic test against a hash-bound snapshot;
@@ -17,9 +22,10 @@ Every application must:
 5. use bounded conclusions and keep accountable human authority explicit;
 6. preserve later review corrections in a tamper-evident append-only chain.
 
-The reusable implementation is under
-`src/crypto_audit_monitor/harness/`. Domain data generation, SQL routing,
-sampling and business interpretation remain in their application modules.
+The implementation designed for reuse is under
+`src/crypto_audit_monitor/harness/`. In the current evidence base, domain data
+generation, SQL routing, sampling and business interpretation all remain
+within the same Risk Control Assurance application.
 
 ## Gate Profile v0.1
 
@@ -54,7 +60,7 @@ artifacts. The current synthetic repository demonstrates deterministic
 recomputation after those tests pass. Neither case authenticates real sources
 nor provides external assurance.
 
-## Current applications
+## Current case contexts within one application
 
 - **Audit Assurance:** fabricated wallet and commission populations, two
   controls, full-population testing, explicit samples and human reviews.
@@ -66,4 +72,5 @@ In the second case, the AI agent is the audited subject. No model performs
 detection, classification, threshold setting, review disposition or final
 decision. The example does not test approval uniqueness, revocation,
 consumption or one-time use; those would require a separately pre-committed
-control.
+control. These two case contexts do not independently demonstrate reuse in a
+different assurance domain.

@@ -7,7 +7,8 @@ claim full Operational Risk or AML coverage.
 
 ## Included
 
-- a domain-neutral Evidence Integrity Harness;
+- an Evidence Integrity Harness designed for domain-neutral reuse, currently
+  demonstrated only within this assurance application;
 - fabricated wallet and commission assurance case;
 - fabricated AI-action approval-binding case;
 - one bounded workflow view of the commission case;
@@ -39,4 +40,5 @@ conclusion artifact remains unsigned and is not an audit opinion.
 
 The released evidence packs demonstrate deterministic recomputation on
 fabricated, hash-bound inputs. L2 source authentication and L3 external
-validation remain explicitly unachieved.
+validation remain explicitly unachieved. Cross-domain reuse has not been
+independently exercised.

@@ -2,8 +2,10 @@
 
 **Transactions, Processes & AI Actions · Third Line**
 
-A third-line, evidence-bound assurance Prototype built on the domain-neutral
-**RiskFirewall Evidence Integrity Harness**.
+A third-line, evidence-bound assurance Prototype built on the **RiskFirewall
+Evidence Integrity Harness**. The Harness is designed for domain-neutral
+reuse, but this release demonstrates it only within one Risk Control Assurance
+application; cross-domain reuse has not been independently exercised.
 
 `Firewall` refers only to evidence-pack admission: integrity drift stops
 evidence export. It does not block transactions, launches, employees or agent
@@ -32,6 +34,19 @@ $env:PYTHONPATH = "src"
 python -m crypto_audit_monitor.run_demo
 start demo\index.html
 ```
+
+```bash
+PYTHONPATH=src python -m crypto_audit_monitor.run_demo
+open demo/index.html       # macOS
+xdg-open demo/index.html   # Linux
+```
+
+## Contribution boundary
+
+The Owner set the objective, risk boundaries and release authorization. Codex
+performed implementation, testing, documentation and Git delivery. This
+development contribution model does not change the product boundary:
+accountable humans retain exception decisions and any assurance conclusion.
 
 ## Shared evidence contract
 
@@ -110,7 +125,7 @@ investigation data.
 config/                 Registered audit and agent-action configurations
 sql/                    Three deterministic SQL rules
 src/crypto_audit_monitor/harness/
-                        Domain-neutral evidence-integrity mechanisms
+                        Evidence-integrity mechanisms designed for reuse
 src/crypto_audit_monitor/
                         Synthetic cases, bounded workflow and renderers
 tests/                  Deterministic and adversarial release checks
@@ -129,6 +144,10 @@ python -m pytest -q
 ```
 
 GitHub Actions runs the same released test suite on each push and pull request.
+
+The current released suite passes 82 deterministic and adversarial checks.
+This is engineering verification, not evidence of adoption, model accuracy or
+real-world control effectiveness.
 
 ## License
 

@@ -1,7 +1,9 @@
 # RiskFirewall Evidence Integrity Harness
 
-The harness is the domain-neutral evidence layer shared by the synthetic
-commission case, AI-action case and bounded workflow view.
+The Harness is designed for domain-neutral reuse. This release demonstrates it
+only within one Risk Control Assurance application, through the synthetic
+commission case, AI-action case and bounded workflow view. Cross-domain reuse
+has not been independently exercised.
 
 It provides:
 
