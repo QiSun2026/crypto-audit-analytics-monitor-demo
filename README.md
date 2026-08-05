@@ -159,11 +159,14 @@ REVIEW_SCOPE.md         Exact release-review and version boundary
 ## Verification
 
 ```powershell
-$env:PYTHONPATH = "src"
-python -m pytest -q
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --no-cache-dir -e ".[dev]"
+.\.venv\Scripts\python.exe -m pytest -q --basetemp .pytest-tmp
 ```
 
 GitHub Actions runs the same released test suite on each push and pull request.
+The repository-local temporary directory is ignored by Git and avoids reusing a
+global pytest workspace.
 
 The current released suite passes 82 deterministic and adversarial checks.
 This is engineering verification, not evidence of adoption, model accuracy or

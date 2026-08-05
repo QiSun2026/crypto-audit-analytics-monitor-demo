@@ -9,6 +9,11 @@ description = "Evidence-integrity harness with deterministic audit assurance exa
 requires-python = ">=3.11"
 license = {text = "Apache-2.0"}
 
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3,<9",
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
