@@ -2,6 +2,26 @@
 
 **Transactions, Processes & AI Actions · Third Line**
 
+## RiskFirewall AI family
+
+RiskFirewall AI is a portfolio family built around one governance method, not
+one shared runtime:
+
+`Declared boundary → constrained or deterministic execution → fail-closed evidence gate → traceable review package → accountable human decision`
+
+It governs whether evidence may advance to accountable human review. It does
+not approve, reject, execute, deploy or certify the underlying product, model,
+transaction or control.
+
+| Project | Control object | Role |
+| --- | --- | --- |
+| **[Product Risk Review](https://github.com/QiSun2026/product-risk-review-skill)** | Complex investment products and their claims | Second-line evidence review |
+| **[Model Risk Review](https://github.com/QiSun2026/riskfirewall-model-risk-review)** | Models and AI decision systems | Developer-built, second-line-style review |
+| **[Risk Control Assurance](https://github.com/QiSun2026/crypto-audit-analytics-monitor-demo)** | Transactions, processes and AI actions | Third-line assurance prototype |
+
+The repositories share this method and human-authority boundary. They do not
+claim a common engine, common data model or production deployment.
+
 A third-line, evidence-bound assurance Prototype built on the **RiskFirewall
 Evidence Integrity Harness**. The Harness is designed for domain-neutral
 reuse, but this release demonstrates it only within one Risk Control Assurance
@@ -148,6 +168,13 @@ GitHub Actions runs the same released test suite on each push and pull request.
 The current released suite passes 82 deterministic and adversarial checks.
 This is engineering verification, not evidence of adoption, model accuracy or
 real-world control effectiveness.
+
+## Status
+
+Public release `v0.3.0` remains the current functional release. The current
+`main` documentation aligns the repository with the RiskFirewall AI family
+contract; it does not rewrite the immutable `v0.3.0` release artifact or alter
+the deterministic assurance logic.
 
 ## License
 
